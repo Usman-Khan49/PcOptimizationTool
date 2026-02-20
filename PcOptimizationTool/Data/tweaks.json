@@ -405,5 +405,330 @@
         { "Name": "wuauserv",                     "StartupType": "Manual",                "OriginalType": "Manual" }
       ]
     }
+  },
+  {
+    "Id": "gaming_tweak_01",
+    "Name": "Gaming Tweak 01",
+    "Description": "Boosts game performance by raising process priority separation, disabling network throttling, setting multimedia scheduling to favor games, and increasing GPU and CPU scheduling priority for game threads.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl",
+          "Name": "Win32PrioritySeparation",
+          "ApplyValue": 38,
+          "UndoValue": 2,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "Name": "SystemResponsiveness",
+          "ApplyValue": 0,
+          "UndoValue": 20,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "Name": "NetworkThrottlingIndex",
+          "ApplyValue": -1,
+          "UndoValue": 10,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "Name": "AlwaysOn",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "Name": "GPU Priority",
+          "ApplyValue": 8,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "Name": "Scheduling Category",
+          "ApplyValue": "High",
+          "UndoValue": "Medium",
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "Name": "SFIO Priority",
+          "ApplyValue": "High",
+          "UndoValue": "Normal",
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "Name": "Priority",
+          "ApplyValue": 6,
+          "UndoValue": 2,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "Name": "Background Only",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        }
+      ]
+    }
+  },
+  {
+    "Id": "gaming_tweak_02",
+    "Name": "Gaming Tweak 02",
+    "Description": "Reduces UI and input latency by eliminating menu/hover delays and foreground lock timeouts, and lowers network latency by disabling TCP delayed acknowledgements and removing the QoS bandwidth reservation.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKCU\\Control Panel\\Desktop",
+          "Name": "MenuShowDelay",
+          "ApplyValue": "0",
+          "UndoValue": "400",
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKCU\\Control Panel\\Desktop",
+          "Name": "MouseHoverTime",
+          "ApplyValue": "10",
+          "UndoValue": "400",
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKCU\\Control Panel\\Desktop",
+          "Name": "ForegroundLockTimeout",
+          "ApplyValue": 0,
+          "UndoValue": 200000,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKCU\\Control Panel\\Desktop",
+          "Name": "LowLevelHooksTimeout",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "Name": "TcpAckFrequency",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "Name": "TCPNoDelay",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
+          "Name": "TcpDelAckTicks",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Psched",
+          "Name": "NonBestEffortLimit",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        }
+      ]
+    }
+  },
+  {
+    "Id": "gaming_tweak_03",
+    "Name": "Gaming Tweak 03",
+    "Description": "Optimizes memory management by keeping kernel in RAM and disabling paging of executive code, tunes NTFS for performance by disabling 8.3 name creation and increasing memory usage, and expands the icon cache to reduce icon reload overhead.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "Name": "LargeSystemCache",
+          "ApplyValue": 1,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "Name": "DisablePagingExecutive",
+          "ApplyValue": 1,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
+          "Name": "SecondLevelDataCache",
+          "ApplyValue": 512,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+          "Name": "NtfsDisable8dot3NameCreation",
+          "ApplyValue": 1,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
+          "Name": "NtfsMemoryUsage",
+          "ApplyValue": 2,
+          "UndoValue": 1,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+          "Name": "Max Cached Icons",
+          "ApplyValue": "4096",
+          "UndoValue": null,
+          "ValueType": "String"
+        }
+      ]
+    }
+  },
+  {
+    "Id": "gaming_tweak_04",
+    "Name": "Gaming Tweak 04",
+    "Description": "Raises Explorer's CPU priority class to High for better shell responsiveness, enables Hardware-Accelerated GPU Scheduling (HAGS) for lower GPU latency, applies DWM overlay and machine-check workarounds for smoother rendering, and fully powers down hardware on shutdown.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\explorer.exe\\PerfOptions",
+          "Name": "CpuPriorityClass",
+          "ApplyValue": 3,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "Name": "HwSchMode",
+          "ApplyValue": 2,
+          "UndoValue": 1,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "Name": "GdiMomentaryLagWorkaround",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm",
+          "Name": "OverlayTestMode",
+          "ApplyValue": 5,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm",
+          "Name": "UseMachineCheck",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+          "Name": "PowerdownAfterShutdown",
+          "ApplyValue": "1",
+          "UndoValue": "0",
+          "ValueType": "String"
+        }
+      ]
+    }
+  },
+  {
+    "Id": "gaming_tweak_05",
+    "Name": "Gaming Tweak 05",
+    "Description": "Disables the HID service to reduce input polling overhead, turns off taskbar and list-view animations to free up GPU cycles, hides recently added apps from Start, and removes low-disk-space notifications and shortcut tracking.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": "Disabling HID service may prevent USB game controllers and other HID devices from working",
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hidserv",
+          "Name": "Start",
+          "ApplyValue": 4,
+          "UndoValue": 3,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "Name": "TaskbarAnimations",
+          "ApplyValue": 0,
+          "UndoValue": 1,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "Name": "ListviewAlphaSelect",
+          "ApplyValue": 0,
+          "UndoValue": 1,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideRecentlyAddedApps",
+          "Name": "value",
+          "ApplyValue": 1,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "Name": "NoLowDiskSpaceChecks",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "Name": "NoResolveTrack",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        }
+      ]
+    }
   }
 ]
