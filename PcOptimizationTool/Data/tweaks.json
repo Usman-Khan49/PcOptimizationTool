@@ -1,5 +1,35 @@
 ﻿[
   {
+    "Id": "win32_priority_separation",
+    "Name": "Win32 Priority Separation",
+    "Description": "Controls how processor time is shared between foreground apps and background processes. Higher values favor foreground app responsiveness.",
+    "Category": 1,
+    "Type": 7,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl",
+      "ValueName": "Win32PrioritySeparation",
+      "ApplyValue": 26,
+      "UndoValue": 2,
+      "ValueType": "DWord",
+      "Options": [
+        { "Label": "1A",                  "Value": 26 },
+        { "Label": "2 (Windows Default)", "Value": 2  },
+        { "Label": "2A",                  "Value": 42 },
+        { "Label": "14",                  "Value": 20 },
+        { "Label": "16",                  "Value": 22 },
+        { "Label": "18",                  "Value": 24 },
+        { "Label": "26 (Fox OS Default)", "Value": 38 },
+        { "Label": "28",                  "Value": 40 },
+        { "Label": "44 (Recommended)",    "Value": 68 }
+      ]
+    }
+  },
+  {
     "Id": "essential_delete_temp_files",
     "Name": "Delete Temporary Files",
     "Description": "Erases TEMP folders — removes junk from both user and system temp directories",
@@ -407,10 +437,10 @@
     }
   },
   {
-    "Id": "gaming_tweak_01",
-    "Name": "Gaming Tweak 01",
-    "Description": "Boosts game performance by raising process priority separation, disabling network throttling, setting multimedia scheduling to favor games, and increasing GPU and CPU scheduling priority for game threads.",
-    "Category": 1,
+    "Id": "brave_debloat",
+    "Name": "Brave Debloat",
+    "Description": "Disables various annoyances like Brave Rewards, Leo AI, Crypto Wallet and VPN",
+    "Category": 0,
     "Type": 0,
     "Panel": 2,
     "Status": 0,
@@ -420,64 +450,36 @@
     "Configuration": {
       "RegistryEntries": [
         {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl",
-          "Name": "Win32PrioritySeparation",
-          "ApplyValue": 38,
-          "UndoValue": 2,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
-          "Name": "SystemResponsiveness",
-          "ApplyValue": 0,
-          "UndoValue": 20,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
-          "Name": "NetworkThrottlingIndex",
-          "ApplyValue": -1,
-          "UndoValue": 10,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
-          "Name": "AlwaysOn",
+          "Path": "HKLM\\SOFTWARE\\Policies\\BraveSoftware\\Brave",
+          "Name": "BraveRewardsDisabled",
           "ApplyValue": 1,
           "UndoValue": null,
           "ValueType": "DWord"
         },
         {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
-          "Name": "GPU Priority",
-          "ApplyValue": 8,
+          "Path": "HKLM\\SOFTWARE\\Policies\\BraveSoftware\\Brave",
+          "Name": "BraveWalletDisabled",
+          "ApplyValue": 1,
           "UndoValue": null,
           "ValueType": "DWord"
         },
         {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
-          "Name": "Scheduling Category",
-          "ApplyValue": "High",
-          "UndoValue": "Medium",
-          "ValueType": "String"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
-          "Name": "SFIO Priority",
-          "ApplyValue": "High",
-          "UndoValue": "Normal",
-          "ValueType": "String"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
-          "Name": "Priority",
-          "ApplyValue": 6,
-          "UndoValue": 2,
+          "Path": "HKLM\\SOFTWARE\\Policies\\BraveSoftware\\Brave",
+          "Name": "BraveVPNDisabled",
+          "ApplyValue": 1,
+          "UndoValue": null,
           "ValueType": "DWord"
         },
         {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
-          "Name": "Background Only",
+          "Path": "HKLM\\SOFTWARE\\Policies\\BraveSoftware\\Brave",
+          "Name": "BraveAIChatEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\BraveSoftware\\Brave",
+          "Name": "BraveStatsPingEnabled",
           "ApplyValue": 0,
           "UndoValue": null,
           "ValueType": "DWord"
@@ -486,10 +488,10 @@
     }
   },
   {
-    "Id": "gaming_tweak_02",
-    "Name": "Gaming Tweak 02",
-    "Description": "Reduces UI and input latency by eliminating menu/hover delays and foreground lock timeouts, and lowers network latency by disabling TCP delayed acknowledgements and removing the QoS bandwidth reservation.",
-    "Category": 1,
+    "Id": "disable_background_apps",
+    "Name": "Disable Background Apps",
+    "Description": "Disables all Microsoft Store apps from running in the background, which has to be done individually since Win11",
+    "Category": 0,
     "Type": 0,
     "Panel": 2,
     "Status": 0,
@@ -499,57 +501,189 @@
     "Configuration": {
       "RegistryEntries": [
         {
-          "Path": "HKCU\\Control Panel\\Desktop",
-          "Name": "MenuShowDelay",
-          "ApplyValue": "0",
-          "UndoValue": "400",
-          "ValueType": "String"
-        },
-        {
-          "Path": "HKCU\\Control Panel\\Desktop",
-          "Name": "MouseHoverTime",
-          "ApplyValue": "10",
-          "UndoValue": "400",
-          "ValueType": "String"
-        },
-        {
-          "Path": "HKCU\\Control Panel\\Desktop",
-          "Name": "ForegroundLockTimeout",
-          "ApplyValue": 0,
-          "UndoValue": 200000,
+          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications",
+          "Name": "GlobalUserDisabled",
+          "ApplyValue": 1,
+          "UndoValue": 0,
           "ValueType": "DWord"
-        },
+        }
+      ]
+    }
+  },
+  {
+    "Id": "disable_fullscreen_optimizations",
+    "Name": "Disable Fullscreen Optimizations",
+    "Description": "Disables FSO in all applications. NOTE: This will disable Color Management in Exclusive Fullscreen",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": "This will disable Color Management in Exclusive Fullscreen",
+    "Configuration": {
+      "RegistryEntries": [
         {
-          "Path": "HKCU\\Control Panel\\Desktop",
-          "Name": "LowLevelHooksTimeout",
-          "ApplyValue": 0,
-          "UndoValue": null,
+          "Path": "HKCU\\System\\GameConfigStore",
+          "Name": "GameDVR_DXGIHonorFSEWindowsCompatible",
+          "ApplyValue": 1,
+          "UndoValue": 0,
           "ValueType": "DWord"
-        },
+        }
+      ]
+    }
+  },
+  {
+    "Id": "disable_notifications",
+    "Name": "Disable Notification Tray/Calendar",
+    "Description": "Disables all Notifications INCLUDING Calendar",
+    "Category": 2,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
         {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
-          "Name": "TcpAckFrequency",
+          "Path": "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+          "Name": "DisableNotificationCenter",
           "ApplyValue": 1,
           "UndoValue": null,
           "ValueType": "DWord"
         },
         {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
-          "Name": "TCPNoDelay",
-          "ApplyValue": 1,
-          "UndoValue": null,
+          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
+          "Name": "ToastEnabled",
+          "ApplyValue": 0,
+          "UndoValue": 1,
           "ValueType": "DWord"
-        },
+        }
+      ]
+    }
+  },
+  {
+    "Id": "edge_debloat",
+    "Name": "Edge Debloat",
+    "Description": "Disables various telemetry options, popups, and other annoyances in Edge.",
+    "Category": 0,
+    "Type": 0,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
         {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters",
-          "Name": "TcpDelAckTicks",
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\EdgeUpdate",
+          "Name": "CreateDesktopShortcutDefault",
           "ApplyValue": 0,
           "UndoValue": null,
           "ValueType": "DWord"
         },
         {
-          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Psched",
-          "Name": "NonBestEffortLimit",
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "PersonalizationReportingEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\ExtensionInstallBlocklist",
+          "Name": "1",
+          "ApplyValue": "ofefcgjbeghpigppfmkologfjadafddi",
+          "UndoValue": null,
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "ShowRecommendationsEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "HideFirstRunExperience",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "UserFeedbackAllowed",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "ConfigureDoNotTrack",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "AlternateErrorPagesEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "EdgeCollectionsEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "EdgeShoppingAssistantEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "MicrosoftEdgeInsiderPromotionEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "ShowMicrosoftRewards",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "WebWidgetAllowed",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "DiagnosticData",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "EdgeAssetDeliveryServiceEnabled",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "Name": "WalletDonationEnabled",
           "ApplyValue": 0,
           "UndoValue": null,
           "ValueType": "DWord"
@@ -558,177 +692,645 @@
     }
   },
   {
-    "Id": "gaming_tweak_03",
-    "Name": "Gaming Tweak 03",
-    "Description": "Optimizes memory management by keeping kernel in RAM and disabling paging of executive code, tunes NTFS for performance by disabling 8.3 name creation and increasing memory usage, and expands the icon cache to reduce icon reload overhead.",
+    "Id": "adobe_network_block",
+    "Name": "Adobe Network Block",
+    "Description": "Reduce user interruptions by selectively blocking connections to Adobe's activation and telemetry servers. Credit: Ruddernation-Designs",
+    "Category": 0,
+    "Type": 5,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "PowerShellCommand": "$hostsUrl = 'https://github.com/Ruddernation-Designs/Adobe-URL-Block-List/raw/refs/heads/master/hosts'; $hosts = \"$Env:SystemRoot\\System32\\drivers\\etc\\hosts\"; Move-Item $hosts \"$hosts.bak\"; Invoke-WebRequest $hostsUrl -OutFile $hosts; ipconfig /flushdns; exit 0",
+      "PowerShellUndoCommand": "$hosts = \"$Env:SystemRoot\\System32\\drivers\\etc\\hosts\"; Remove-Item $hosts; Move-Item \"$hosts.bak\" $hosts; ipconfig /flushdns; exit 0"
+    }
+  },
+  {
+    "Id": "razer_block",
+    "Name": "Block Razer Software Installs",
+    "Description": "Blocks ALL Razer Software installations. The hardware works fine without any software. WARNING: this will also block all Windows third-party driver installations.",
+    "Category": 4,
+    "Type": 6,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": "This will also block all Windows third-party driver installations",
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching",
+          "Name": "SearchOrderConfig",
+          "ApplyValue": 0,
+          "UndoValue": 1,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Installer",
+          "Name": "DisableCoInstallers",
+          "ApplyValue": 1,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        }
+      ],
+      "PowerShellCommand": "$RazerPath = 'C:\\Windows\\Installer\\Razer'; if (Test-Path $RazerPath) { Remove-Item \"$RazerPath\\*\" -Recurse -Force } else { New-Item -Path $RazerPath -ItemType Directory }; icacls $RazerPath /deny 'Everyone:(W)'; exit 0",
+      "PowerShellUndoCommand": "icacls 'C:\\Windows\\Installer\\Razer' /remove:d Everyone; exit 0"
+    }
+  },
+  {
+    "Id": "disable_ipv6",
+    "Name": "Disable IPv6",
+    "Description": "Disables IPv6.",
+    "Category": 3,
+    "Type": 6,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": "Some applications and services may require IPv6 to function correctly",
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters",
+          "Name": "DisabledComponents",
+          "ApplyValue": 255,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        }
+      ],
+      "PowerShellCommand": "Disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6; exit 0",
+      "PowerShellUndoCommand": "Enable-NetAdapterBinding -Name * -ComponentID ms_tcpip6; exit 0"
+    }
+  },
+  {
+    "Id": "disable_copilot",
+    "Name": "Disable Microsoft Copilot",
+    "Description": "Disables MS Copilot AI built into Windows since 23H2.",
+    "Category": 0,
+    "Type": 6,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "Name": "TurnOffWindowsCopilot",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+          "Name": "TurnOffWindowsCopilot",
+          "ApplyValue": 1,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+          "Name": "ShowCopilotButton",
+          "ApplyValue": 0,
+          "UndoValue": 1,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot",
+          "Name": "IsCopilotAvailable",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot",
+          "Name": "CopilotDisabledReason",
+          "ApplyValue": "IsEnabledForGeographicRegionFailed",
+          "UndoValue": null,
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsCopilot",
+          "Name": "AllowCopilotRuntime",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Blocked",
+          "Name": "{CB3B0003-8088-4EDE-8769-8B354AB2FF8C}",
+          "ApplyValue": "",
+          "UndoValue": null,
+          "ValueType": "String"
+        },
+        {
+          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot\\BingChat",
+          "Name": "IsUserEligible",
+          "ApplyValue": 0,
+          "UndoValue": null,
+          "ValueType": "DWord"
+        }
+      ],
+      "PowerShellCommand": "Get-AppxPackage -AllUsers *Copilot* | Remove-AppxPackage -AllUsers; Get-AppxPackage -AllUsers Microsoft.MicrosoftOfficeHub | Remove-AppxPackage -AllUsers; $Appx = (Get-AppxPackage MicrosoftWindows.Client.CoreAI).PackageFullName; $Sid = (Get-LocalUser $Env:UserName).Sid.Value; New-Item \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Appx\\AppxAllUserStore\\EndOfLife\\$Sid\\$Appx\" -Force -EA SilentlyContinue; Remove-AppxPackage $Appx -EA SilentlyContinue; exit 0",
+      "PowerShellUndoCommand": "winget install --name Copilot --source msstore --accept-package-agreements --accept-source-agreements --silent; exit 0"
+    }
+  },
+  {
+    "Id": "disable_teredo",
+    "Name": "Disable Teredo",
+    "Description": "Teredo network tunneling is an IPv6 feature that can cause additional latency, but may cause problems with some games.",
+    "Category": 3,
+    "Type": 6,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": "May cause problems with some online games",
+    "Configuration": {
+      "RegistryEntries": [
+        {
+          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters",
+          "Name": "DisabledComponents",
+          "ApplyValue": 1,
+          "UndoValue": 0,
+          "ValueType": "DWord"
+        }
+      ],
+      "PowerShellCommand": "netsh interface teredo set state disabled; exit 0",
+      "PowerShellUndoCommand": "netsh interface teredo set state default; exit 0"
+    }
+  },
+  {
+    "Id": "remove_gallery",
+    "Name": "Remove Gallery from Explorer",
+    "Description": "Removes the Gallery from Explorer and sets This PC as default",
+    "Category": 2,
+    "Type": 5,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "PowerShellCommand": "Remove-Item \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}\" -EA SilentlyContinue; exit 0",
+      "PowerShellUndoCommand": "New-Item -Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}\" -Force -EA SilentlyContinue; exit 0"
+    }
+  },
+  {
+    "Id": "remove_home",
+    "Name": "Remove Home from Explorer",
+    "Description": "Removes the Home from Explorer and sets This PC as default",
+    "Category": 2,
+    "Type": 5,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "PowerShellCommand": "Remove-Item \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}\" -EA SilentlyContinue; Set-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\" -Name LaunchTo -Value 1 -EA SilentlyContinue; exit 0",
+      "PowerShellUndoCommand": "New-Item -Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}\" -Force -EA SilentlyContinue; Set-ItemProperty -Path \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\" -Name LaunchTo -Value 0 -EA SilentlyContinue; exit 0"
+    }
+  },
+  {
+    "Id": "remove_onedrive",
+    "Name": "Remove OneDrive",
+    "Description": "Denies permission to remove OneDrive user files, then uses its own uninstaller to remove it, then restores permissions",
+    "Category": 0,
+    "Type": 5,
+    "Panel": 2,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": "This will stop Explorer during uninstall — save your work first",
+    "Configuration": {
+      "PowerShellCommand": "icacls $Env:OneDrive /deny \"Administrators:(D,DC)\"; Start-Process 'C:\\Windows\\System32\\OneDriveSetup.exe' -ArgumentList '/uninstall' -Wait; Stop-Process -Name FileCoAuth,Explorer -EA SilentlyContinue; Remove-Item \"$Env:LocalAppData\\Microsoft\\OneDrive\" -Recurse -Force -EA SilentlyContinue; Remove-Item 'C:\\ProgramData\\Microsoft OneDrive' -Recurse -Force -EA SilentlyContinue; icacls $Env:OneDrive /grant \"Administrators:(D,DC)\" -EA SilentlyContinue; Set-Service -Name OneSyncSvc -StartupType Disabled -EA SilentlyContinue; exit 0",
+      "PowerShellUndoCommand": "winget install Microsoft.Onedrive --source winget --accept-package-agreements --accept-source-agreements --silent; Set-Service -Name OneSyncSvc -StartupType Automatic -EA SilentlyContinue; exit 0"
+    }
+  },
+  {
+    "Id": "additional_system_optimizations",
+    "Name": "Additional System Optimizations",
+    "Description": "Resets LargeSystemCache, NTFS memory usage, enables prefetcher, resets HAGS, and disables global timer resolution requests for a balanced system profile.",
     "Category": 1,
     "Type": 0,
-    "Panel": 2,
+    "Panel": 3,
     "Status": 0,
     "IsEnabled": false,
     "RequiresRestart": true,
     "WarningMessage": null,
     "Configuration": {
       "RegistryEntries": [
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
-          "Name": "LargeSystemCache",
-          "ApplyValue": 1,
-          "UndoValue": 0,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
-          "Name": "DisablePagingExecutive",
-          "ApplyValue": 1,
-          "UndoValue": 0,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management",
-          "Name": "SecondLevelDataCache",
-          "ApplyValue": 512,
-          "UndoValue": 0,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
-          "Name": "NtfsDisable8dot3NameCreation",
-          "ApplyValue": 1,
-          "UndoValue": 0,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem",
-          "Name": "NtfsMemoryUsage",
-          "ApplyValue": 2,
-          "UndoValue": 1,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer",
-          "Name": "Max Cached Icons",
-          "ApplyValue": "4096",
-          "UndoValue": null,
-          "ValueType": "String"
-        }
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management", "Name": "LargeSystemCache", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem", "Name": "NtfsMemoryUsage", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters", "Name": "EnablePrefetcher", "ApplyValue": 3, "UndoValue": 3, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters", "Name": "EnableSuperfetch", "ApplyValue": 0, "UndoValue": 1, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers", "Name": "HwSchMode", "ApplyValue": 1, "UndoValue": 2, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile", "Name": "NetworkThrottlingIndex", "ApplyValue": 10, "UndoValue": 10, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile", "Name": "SystemResponsiveness", "ApplyValue": 10, "UndoValue": 20, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerSettings\\54533251-82be-4824-96c1-47b60b740d00\\0cc5b647-c1df-4637-891a-dec35c318583", "Name": "Attributes", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel", "Name": "GlobalTimerResolutionRequests", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" }
       ]
     }
   },
   {
-    "Id": "gaming_tweak_04",
-    "Name": "Gaming Tweak 04",
-    "Description": "Raises Explorer's CPU priority class to High for better shell responsiveness, enables Hardware-Accelerated GPU Scheduling (HAGS) for lower GPU latency, applies DWM overlay and machine-check workarounds for smoother rendering, and fully powers down hardware on shutdown.",
-    "Category": 1,
+    "Id": "decrease_network_delay",
+    "Name": "Decrease Network Delay",
+    "Description": "Tunes LanmanServer parameters to reduce network disconnect timeouts, disable opportunistic locking, and lower sharing violation delays.",
+    "Category": 3,
     "Type": 0,
-    "Panel": 2,
+    "Panel": 3,
     "Status": 0,
     "IsEnabled": false,
     "RequiresRestart": true,
     "WarningMessage": null,
     "Configuration": {
       "RegistryEntries": [
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\explorer.exe\\PerfOptions",
-          "Name": "CpuPriorityClass",
-          "ApplyValue": 3,
-          "UndoValue": null,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
-          "Name": "HwSchMode",
-          "ApplyValue": 2,
-          "UndoValue": 1,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
-          "Name": "GdiMomentaryLagWorkaround",
-          "ApplyValue": 1,
-          "UndoValue": null,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm",
-          "Name": "OverlayTestMode",
-          "ApplyValue": 5,
-          "UndoValue": null,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm",
-          "Name": "UseMachineCheck",
-          "ApplyValue": 1,
-          "UndoValue": null,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
-          "Name": "PowerdownAfterShutdown",
-          "ApplyValue": "1",
-          "UndoValue": "0",
-          "ValueType": "String"
-        }
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "autodisconnect", "ApplyValue": -1, "UndoValue": 15, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "Size", "ApplyValue": 3, "UndoValue": 1, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "EnableOplocks", "ApplyValue": 0, "UndoValue": 1, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "IRPStackSize", "ApplyValue": 32, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "SharingViolationDelay", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "SharingViolationRetries", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" }
       ]
     }
   },
   {
-    "Id": "gaming_tweak_05",
-    "Name": "Gaming Tweak 05",
-    "Description": "Disables the HID service to reduce input polling overhead, turns off taskbar and list-view animations to free up GPU cycles, hides recently added apps from Start, and removes low-disk-space notifications and shortcut tracking.",
+    "Id": "disable_gpu_energy_driver",
+    "Name": "Disable GPU Energy Driver",
+    "Description": "Disables the GpuEnergyDrv service which can cause micro-stutters by dynamically adjusting GPU power states.",
     "Category": 1,
     "Type": 0,
-    "Panel": 2,
+    "Panel": 3,
     "Status": 0,
     "IsEnabled": false,
     "RequiresRestart": true,
-    "WarningMessage": "Disabling HID service may prevent USB game controllers and other HID devices from working",
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\GpuEnergyDrv",
+      "ValueName": "Start",
+      "ApplyValue": 4,
+      "UndoValue": 3,
+      "ValueType": "DWord"
+    }
+  },
+  {
+    "Id": "disable_network_throttling",
+    "Name": "Disable Network Throttling",
+    "Description": "Removes the multimedia network throttling index limit and sets system responsiveness to zero, maximizing network throughput for games.",
+    "Category": 3,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
     "Configuration": {
       "RegistryEntries": [
-        {
-          "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hidserv",
-          "Name": "Start",
-          "ApplyValue": 4,
-          "UndoValue": 3,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-          "Name": "TaskbarAnimations",
-          "ApplyValue": 0,
-          "UndoValue": 1,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-          "Name": "ListviewAlphaSelect",
-          "ApplyValue": 0,
-          "UndoValue": 1,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideRecentlyAddedApps",
-          "Name": "value",
-          "ApplyValue": 1,
-          "UndoValue": 0,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-          "Name": "NoLowDiskSpaceChecks",
-          "ApplyValue": 1,
-          "UndoValue": null,
-          "ValueType": "DWord"
-        },
-        {
-          "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-          "Name": "NoResolveTrack",
-          "ApplyValue": 1,
-          "UndoValue": null,
-          "ValueType": "DWord"
-        }
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile", "Name": "NetworkThrottlingIndex", "ApplyValue": -1, "UndoValue": 10, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile", "Name": "SystemResponsiveness", "ApplyValue": 0, "UndoValue": 20, "ValueType": "DWord" }
       ]
+    }
+  },
+  {
+    "Id": "disable_power_throttling",
+    "Name": "Disable Power Throttling",
+    "Description": "Disables Windows power throttling which can limit CPU performance for background processes.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling",
+      "ValueName": "PowerThrottlingOff",
+      "ApplyValue": 1,
+      "UndoValue": null,
+      "ValueType": "DWord"
+    }
+  },
+  {
+    "Id": "fix_keyboard_input_delay",
+    "Name": "Fix Keyboard Input Delay",
+    "Description": "Sets keyboard delay to 0 for near-instant key registration.",
+    "Category": 2,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKCU\\Control Panel\\Keyboard", "Name": "KeyboardDelay", "ApplyValue": "0", "UndoValue": "1", "ValueType": "String" },
+        { "Path": "HKU\\.DEFAULT\\Control Panel\\Keyboard", "Name": "KeyboardDelay", "ApplyValue": "0", "UndoValue": "1", "ValueType": "String" }
+      ]
+    }
+  },
+  {
+    "Id": "fortnite_cpu_priority",
+    "Name": "Fortnite CPU Priority",
+    "Description": "Sets the CPU priority class for Fortnite. High Priority gives the game more CPU time; Normal Priority is the Windows default.",
+    "Category": 1,
+    "Type": 7,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryPath": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\FortniteClient-Win64-Shipping.exe\\PerfOptions",
+      "ValueName": "CpuPriorityClass",
+      "ApplyValue": 3,
+      "UndoValue": null,
+      "ValueType": "DWord",
+      "Options": [
+        { "Label": "Normal Priority", "Value": 2 },
+        { "Label": "High Priority",   "Value": 3 }
+      ]
+    }
+  },
+  {
+    "Id": "full_screen_optimization",
+    "Name": "Full Screen Optimizations",
+    "Description": "Configures GameDVR to run games in true exclusive fullscreen mode for lower input latency and better performance.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKCU\\System\\GameConfigStore", "Name": "GameDVR_FSEBehaviorMode", "ApplyValue": 2, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKCU\\System\\GameConfigStore", "Name": "GameDVR_HonorUserFSEBehaviorMode", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKCU\\System\\GameConfigStore", "Name": "GameDVR_FSEBehavior", "ApplyValue": 2, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKCU\\System\\GameConfigStore", "Name": "GameDVR_DXGIHonorFSEWindowsCompatible", "ApplyValue": 1, "UndoValue": 0, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "game_priority_optimizations",
+    "Name": "Game Priority Optimizations",
+    "Description": "Tunes multimedia scheduler tasks (Games and Audio) for lower latency and higher GPU/CPU priority, and disables telemetry collection.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "Affinity", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "Background Only", "ApplyValue": "True", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "Clock Rate", "ApplyValue": 10000, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "GPU Priority", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "Priority", "ApplyValue": 2, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "Scheduling Category", "ApplyValue": "Medium", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Audio", "Name": "SFIO Priority", "ApplyValue": "High", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "Affinity", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "Background Only", "ApplyValue": "False", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "BackgroundPriority", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "Clock Rate", "ApplyValue": 10000, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "GPU Priority", "ApplyValue": 8, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "Priority", "ApplyValue": 2, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "Scheduling Category", "ApplyValue": "High", "UndoValue": "Medium", "ValueType": "String" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games", "Name": "SFIO Priority", "ApplyValue": "High", "UndoValue": "Normal", "ValueType": "String" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl", "Name": "IRQ8Priority", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows", "Name": "CEIPEnable", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat", "Name": "AITEnable", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "gpu_tweaks",
+    "Name": "GPU Tweaks (NVIDIA)",
+    "Description": "Enables per-CPU-core DPC for NVIDIA GPU scheduling, which can reduce GPU stutter on multi-core systems.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": "NVIDIA GPUs only — has no effect on AMD or Intel graphics",
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers", "Name": "RmGpsPsEnablePerCpuCoreDpc", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power", "Name": "RmGpsPsEnablePerCpuCoreDpc", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm", "Name": "RmGpsPsEnablePerCpuCoreDpc", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\NVAPI", "Name": "RmGpsPsEnablePerCpuCoreDpc", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak", "Name": "RmGpsPsEnablePerCpuCoreDpc", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "memory_management_optimizations",
+    "Name": "Memory Management Optimizations",
+    "Description": "Disables paging of executive code, tunes pool quotas, enables Spectre mitigations override, and disables boot trace for faster memory performance.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "DisablePagingExecutive", "ApplyValue": 1, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "LargeSystemCache", "ApplyValue": 0, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "NonPagedPoolQuota", "ApplyValue": 0, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "NonPagedPoolSize", "ApplyValue": 0, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "PagedPoolQuota", "ApplyValue": 0, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "PagedPoolSize", "ApplyValue": 192, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "SystemPages", "ApplyValue": -1, "UndoValue": 0, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "FeatureSettingsOverride", "ApplyValue": 3, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "FeatureSettingsOverrideMask", "ApplyValue": 3, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "KernelSEHOPEnabled", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "DisableExceptionChainValidation", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "PhysicalAddressExtension", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "PoolUsageMaximum", "ApplyValue": 96, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "EnableBoottrace", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "EnableCfg", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "EnableLowVaAccess", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "CoalescingTimerInterval", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "IoPageLockLimit", "ApplyValue": 8003872, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management", "Name": "DisablePagingCombining", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management\\PrefetchParameters", "Name": "EnableBootTrace", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\ControlSet001\\Control\\Session Manager\\Memory Management\\PrefetchParameters", "Name": "EnablePrefetcher", "ApplyValue": 0, "UndoValue": 3, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "monitor_latency_tolerance",
+    "Name": "Monitor Latency Tolerance",
+    "Description": "Sets monitor latency and refresh latency tolerance to zero on the DXGKrnl driver for tighter frame pacing.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DXGKrnl", "Name": "MonitorLatencyTolerance", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DXGKrnl", "Name": "MonitorRefreshLatencyTolerance", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "ping_optimization",
+    "Name": "Ping Optimization",
+    "Description": "Tunes TCP acknowledgement frequency, congestion algorithm, and AFD send/receive windows to reduce network latency in games.",
+    "Category": 3,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "DelayedAckFrequency", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "DelayedAckTicks", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "CongestionAlgorithm", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "MultihopSets", "ApplyValue": 15, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "FastCopyReceiveThreshold", "ApplyValue": 16384, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "FastSendDatagramThreshold", "ApplyValue": 16384, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "DefaultReceiveWindow", "ApplyValue": 16384, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "DefaultSendWindow", "ApplyValue": 16384, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "FastCopyReceiveThreshold", "ApplyValue": 16384, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "FastSendDatagramThreshold", "ApplyValue": 16384, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "DynamicSendBufferDisable", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "IgnorePushBitOnReceives", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "NonBlockingSendSpecialBuffering", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AFD\\Parameters", "Name": "DisableRawSecurity", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "ping_tweaks",
+    "Name": "Ping Tweaks",
+    "Description": "Comprehensive TCP/IP tuning: adjusts TTL, enables RSS and SACK, sets DNS provider priority, removes QoS bandwidth reservation, and tunes LanmanServer/Workstation buffers.",
+    "Category": 3,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "DefaultTTL", "ApplyValue": 64, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "DisableTaskOffload", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "EnableConnectionRateLimiting", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "EnableDCA", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "EnablePMTUBHDetect", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "EnablePMTUDiscovery", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "EnableRSS", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "TcpTimedWaitDelay", "ApplyValue": 30, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "EnableWsd", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "GlobalMaxTcpWindowSize", "ApplyValue": 65535, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "MaxConnectionsPer1_0Server", "ApplyValue": 10, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "MaxConnectionsPerServer", "ApplyValue": 10, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "MaxFreeTcbs", "ApplyValue": 65536, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "Tcp1323Opts", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "TcpCreateAndConnectTcbRateLimitDepth", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "TcpMaxDataRetransmissions", "ApplyValue": 3, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "TcpMaxDupAcks", "ApplyValue": 2, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "TcpMaxSendFree", "ApplyValue": 65535, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "TcpNumConnections", "ApplyValue": 16777214, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "MaxHashTableSize", "ApplyValue": 65536, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "MaxUserPort", "ApplyValue": 65534, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "SackOpts", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "SynAttackProtect", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Microsoft\\MSMQ\\Parameters", "Name": "TCPNoDelay", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\ServiceProvider", "Name": "LocalPriority", "ApplyValue": 4, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\ServiceProvider", "Name": "HostsPriority", "ApplyValue": 5, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\ServiceProvider", "Name": "DnsPriority", "ApplyValue": 6, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\ServiceProvider", "Name": "NetbtPriority", "ApplyValue": 7, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Psched", "Name": "NonBestEffortLimit", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Psched", "Name": "NonBestEffortLimit", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", "Name": "MaxCmds", "ApplyValue": 30, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", "Name": "MaxThreads", "ApplyValue": 30, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", "Name": "MaxCollectionCount", "ApplyValue": 32, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "IRPStackSize", "ApplyValue": 50, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "SizReqBuf", "ApplyValue": 17424, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "Size", "ApplyValue": 3, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "MaxWorkItems", "ApplyValue": 8192, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "MaxMpxCt", "ApplyValue": 2048, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "Name": "MaxCmds", "ApplyValue": 2048, "UndoValue": null, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "internet_qos_tweaks",
+    "Name": "Internet QoS Tweaks",
+    "Description": "Disables TCP autotuning and QoS DSCP marking to remove bandwidth reservations and reduce NLA probe timeouts.",
+    "Category": 3,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryEntries": [
+        { "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\QoS", "Name": "Tcp Autotuning Level", "ApplyValue": "Off", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\QoS", "Name": "Application DSCP Marking Request", "ApplyValue": "Ignored", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\QoS", "Name": "Do not use NLA", "ApplyValue": "1", "UndoValue": null, "ValueType": "String" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "Name": "DisableUserTOSSetting", "ApplyValue": 0, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet", "Name": "CorpLocationProbeTimeout", "ApplyValue": 30, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet", "Name": "LdapTimeoutMs", "ApplyValue": 5000, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet", "Name": "ShowDomainEndpointInterfaces", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet", "Name": "EnableNoGatewayLocationDetection", "ApplyValue": 1, "UndoValue": null, "ValueType": "DWord" },
+        { "Path": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet", "Name": "MinimumInternetHopCount", "ApplyValue": 2, "UndoValue": null, "ValueType": "DWord" }
+      ]
+    }
+  },
+  {
+    "Id": "valorant_high_priority",
+    "Name": "VALORANT High Priority",
+    "Description": "Sets VALORANT's CPU priority class to High so the game receives more processor time.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": false,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryPath": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\VALORANT-Win64-Shipping.exe\\PerfOptions",
+      "ValueName": "CpuPriorityClass",
+      "ApplyValue": 3,
+      "UndoValue": null,
+      "ValueType": "DWord"
+    }
+  },
+  {
+    "Id": "wake_up_all_cores",
+    "Name": "Wake Up All Cores",
+    "Description": "Exposes the processor idle demote threshold power setting, allowing all CPU cores to be kept active for lower latency.",
+    "Category": 1,
+    "Type": 0,
+    "Panel": 3,
+    "Status": 0,
+    "IsEnabled": false,
+    "RequiresRestart": true,
+    "WarningMessage": null,
+    "Configuration": {
+      "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerSettings\\54533251-82be-4824-96c1-47b60b740d00\\943c8cb6-6f93-4227-ad87-e9a3feec08d1",
+      "ValueName": "Attributes",
+      "ApplyValue": "2",
+      "UndoValue": null,
+      "ValueType": "String"
     }
   }
 ]

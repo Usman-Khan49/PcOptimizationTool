@@ -22,6 +22,16 @@
         <SolidColorBrush x:Key="StatusBarBrush"     Color="#1AFFFFFF"/>
         <SolidColorBrush x:Key="AccentBrush"        Color="#FF0078D4"/>
 
+        <!-- Tiny All/None buttons used in each panel header -->
+        <Style x:Key="HeaderMiniButton" TargetType="Button">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="7,2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
         <!-- Removes default ListViewItem chrome so checkboxes render cleanly -->
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -76,10 +86,22 @@
                     <Border DockPanel.Dock="Top"
                             Background="{StaticResource CardHeaderBrush}"
                             CornerRadius="7,7,0,0"
-                            Padding="16,10">
-                        <TextBlock Text="Gaming Tweaks"
-                                   FontWeight="SemiBold"
-                                   FontSize="13"/>
+                            Padding="12,8">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                <Button Content="All"
+                                        Style="{StaticResource HeaderMiniButton}"
+                                        Command="{Binding SelectAllSystemCommand}"
+                                        Margin="0,0,4,0"/>
+                                <Button Content="None"
+                                        Style="{StaticResource HeaderMiniButton}"
+                                        Command="{Binding DeselectAllSystemCommand}"/>
+                            </StackPanel>
+                            <TextBlock Text="Big Boy Tweaks"
+                                       FontWeight="SemiBold"
+                                       FontSize="13"
+                                       VerticalAlignment="Center"/>
+                        </DockPanel>
                     </Border>
 
                     <ListView ItemsSource="{Binding SystemTweaks}"
@@ -89,14 +111,28 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                                          VerticalAlignment="Top">
-                                    <StackPanel Margin="4,0,0,0">
+                                          VerticalAlignment="Center"
+                                          Margin="0,2">
+                                    <StackPanel Orientation="Horizontal" Margin="4,0,0,0" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Name}"
-                                                   FontWeight="SemiBold"/>
-                                        <TextBlock Text="{Binding Description}"
-                                                   FontSize="11"
-                                                   Opacity="0.55"
-                                                   TextWrapping="Wrap"/>
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                        <Border Width="15" Height="15"
+                                                CornerRadius="8"
+                                                Background="#33FFFFFF"
+                                                Margin="6,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Cursor="Help"
+                                                ToolTip="{Binding Description}"
+                                                ToolTipService.InitialShowDelay="300"
+                                                ToolTipService.ShowDuration="10000">
+                                            <TextBlock Text="?"
+                                                       FontSize="9"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Opacity="0.75"/>
+                                        </Border>
                                     </StackPanel>
                                 </CheckBox>
                             </DataTemplate>
@@ -105,43 +141,150 @@
                 </DockPanel>
             </Border>
 
-            <!-- Right: Service & Windows tweaks -->
-            <Border Grid.Column="2"
-                    BorderThickness="1"
-                    BorderBrush="{StaticResource CardBorderBrush}"
-                    CornerRadius="8">
-                <DockPanel>
-                    <Border DockPanel.Dock="Top"
-                            Background="{StaticResource CardHeaderBrush}"
-                            CornerRadius="7,7,0,0"
-                            Padding="16,10">
-                        <TextBlock Text="Windows Tweaks"
-                                   FontWeight="SemiBold"
-                                   FontSize="13"/>
-                    </Border>
+            <!-- Right: Secret Sauce (top) + Windows Tweaks (bottom) -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                    <ListView ItemsSource="{Binding ServiceTweaks}"
-                              BorderThickness="0"
-                              Background="Transparent"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                                          VerticalAlignment="Top">
-                                    <StackPanel Margin="4,0,0,0">
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontWeight="SemiBold"/>
-                                        <TextBlock Text="{Binding Description}"
-                                                   FontSize="11"
-                                                   Opacity="0.55"
-                                                   TextWrapping="Wrap"/>
-                                    </StackPanel>
-                                </CheckBox>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </DockPanel>
-            </Border>
+                <!-- Top: Secret Sauce -->
+                <Border Grid.Row="0"
+                        BorderThickness="1"
+                        BorderBrush="{StaticResource CardBorderBrush}"
+                        CornerRadius="8">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                Background="{StaticResource CardHeaderBrush}"
+                                CornerRadius="7,7,0,0"
+                                Padding="12,8">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <Button Content="All"
+                                            Style="{StaticResource HeaderMiniButton}"
+                                            Command="{Binding SelectAllSecretSauceCommand}"
+                                            Margin="0,0,4,0"/>
+                                    <Button Content="None"
+                                            Style="{StaticResource HeaderMiniButton}"
+                                            Command="{Binding DeselectAllSecretSauceCommand}"/>
+                                </StackPanel>
+                                <TextBlock Text="Secret Sauce"
+                                           FontWeight="SemiBold"
+                                           FontSize="13"
+                                           VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+
+                        <ListView ItemsSource="{Binding SecretSauceTweaks}"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                              VerticalAlignment="Top"
+                                              Margin="0,2">
+                                        <StackPanel Margin="4,0,0,0">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="SemiBold"
+                                                           VerticalAlignment="Center"/>
+                                                <Border Width="15" Height="15"
+                                                        CornerRadius="8"
+                                                        Background="#33FFFFFF"
+                                                        Margin="6,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        Cursor="Help"
+                                                        ToolTip="{Binding Description}"
+                                                        ToolTipService.InitialShowDelay="300"
+                                                        ToolTipService.ShowDuration="10000">
+                                                    <TextBlock Text="?"
+                                                               FontSize="9"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Opacity="0.75"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <ComboBox ItemsSource="{Binding Options}"
+                                                      SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
+                                                      DisplayMemberPath="Label"
+                                                      MinWidth="200"
+                                                      Margin="0,6,0,2"
+                                                      Visibility="{Binding IsChoiceTweak, Converter={StaticResource BoolToVis}}"/>
+                                        </StackPanel>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                </Border>
+
+                <!-- Bottom: Windows Tweaks -->
+                <Border Grid.Row="2"
+                        BorderThickness="1"
+                        BorderBrush="{StaticResource CardBorderBrush}"
+                        CornerRadius="8">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                Background="{StaticResource CardHeaderBrush}"
+                                CornerRadius="7,7,0,0"
+                                Padding="12,8">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <Button Content="All"
+                                            Style="{StaticResource HeaderMiniButton}"
+                                            Command="{Binding SelectAllServiceCommand}"
+                                            Margin="0,0,4,0"/>
+                                    <Button Content="None"
+                                            Style="{StaticResource HeaderMiniButton}"
+                                            Command="{Binding DeselectAllServiceCommand}"/>
+                                </StackPanel>
+                                <TextBlock Text="Windows Tweaks"
+                                           FontWeight="SemiBold"
+                                           FontSize="13"
+                                           VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+
+                        <ListView ItemsSource="{Binding ServiceTweaks}"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                          VerticalAlignment="Center"
+                                                          Margin="0,2">
+                                                    <StackPanel Orientation="Horizontal" Margin="4,0,0,0" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   FontWeight="SemiBold"
+                                                                   VerticalAlignment="Center"/>
+                                                        <Border Width="15" Height="15"
+                                                                CornerRadius="8"
+                                                                Background="#33FFFFFF"
+                                                                Margin="6,0,0,0"
+                                                                VerticalAlignment="Center"
+                                                                Cursor="Help"
+                                                                ToolTip="{Binding Description}"
+                                                                ToolTipService.InitialShowDelay="300"
+                                                                ToolTipService.ShowDuration="10000">
+                                                            <TextBlock Text="?"
+                                                                       FontSize="9"
+                                                                       FontWeight="Bold"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       Opacity="0.75"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </CheckBox>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </DockPanel>
+                            </Border>
+                            </Grid>
         </Grid>
 
         <!-- ── Buttons ────────────────────────────────────────── -->

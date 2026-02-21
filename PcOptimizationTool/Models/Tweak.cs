@@ -18,7 +18,7 @@ namespace PcOptimizationTool.Models
         public string? WarningMessage { get; set; }
 
         /// <summary>
-        /// 1 = Windows Tweaks column, 2 = Gaming Tweaks column
+        /// 1 = Windows Tweaks column, 2 = Big Boy Tweaks column, 3 = Secret Sauce column
         /// </summary>
         public int Panel { get; set; } = 1;
 

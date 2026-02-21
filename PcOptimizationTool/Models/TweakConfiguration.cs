@@ -59,5 +59,10 @@ namespace PcOptimizationTool.Models
         /// Multiple service entries (used when a tweak configures more than one service)
         /// </summary>
         public List<ServiceEntry>? ServiceEntries { get; set; }
+
+        /// <summary>
+        /// Selectable value options for Choice-type tweaks
+        /// </summary>
+        public List<TweakOption>? Options { get; set; }
     }
 }

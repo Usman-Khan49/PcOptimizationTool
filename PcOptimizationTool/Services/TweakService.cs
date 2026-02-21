@@ -38,9 +38,10 @@ namespace PcOptimizationTool.Services
         {
             return tweak.Type switch
             {
-                TweakType.Registry => ApplyRegistryTweak(tweak),
+                TweakType.Registry or TweakType.Choice => ApplyRegistryTweak(tweak),
                 TweakType.PowerShell => await RunPowerShellTweakAsync(tweak, apply: true),
                 TweakType.Service => await RunServiceTweakAsync(tweak, apply: true),
+                TweakType.Combined => await ApplyCombinedTweakAsync(tweak),
                 _ => Fail(tweak.Id, $"Tweak type '{tweak.Type}' is not supported yet")
             };
         }
@@ -49,9 +50,10 @@ namespace PcOptimizationTool.Services
         {
             return tweak.Type switch
             {
-                TweakType.Registry => UndoRegistryTweak(tweak),
+                TweakType.Registry or TweakType.Choice => UndoRegistryTweak(tweak),
                 TweakType.PowerShell => await RunPowerShellTweakAsync(tweak, apply: false),
                 TweakType.Service => await RunServiceTweakAsync(tweak, apply: false),
+                TweakType.Combined => await UndoCombinedTweakAsync(tweak),
                 _ => Fail(tweak.Id, $"Tweak type '{tweak.Type}' is not supported yet")
             };
         }
@@ -71,7 +73,7 @@ namespace PcOptimizationTool.Services
 
         public async Task<TweakStatus> GetTweakStatusAsync(Tweak tweak)
         {
-            if (tweak.Type != TweakType.Registry)
+            if (tweak.Type is not (TweakType.Registry or TweakType.Combined or TweakType.Choice))
                 return TweakStatus.Unknown;
 
             var config = tweak.Configuration;
@@ -167,6 +169,30 @@ namespace PcOptimizationTool.Services
             return success
                 ? Ok(tweak.Id, "Registry tweak reverted")
                 : Fail(tweak.Id, "Failed to revert registry value");
+        }
+
+        // ── Combined (Registry + PowerShell) ────────────────────────────────
+
+        private async Task<TweakResult> ApplyCombinedTweakAsync(Tweak tweak)
+        {
+            var regResult = ApplyRegistryTweak(tweak);
+            if (!regResult.Success) return regResult;
+
+            if (!string.IsNullOrWhiteSpace(tweak.Configuration.PowerShellCommand))
+                return await RunPowerShellTweakAsync(tweak, apply: true);
+
+            return Ok(tweak.Id, "Combined tweak applied");
+        }
+
+        private async Task<TweakResult> UndoCombinedTweakAsync(Tweak tweak)
+        {
+            var regResult = UndoRegistryTweak(tweak);
+            if (!regResult.Success) return regResult;
+
+            if (!string.IsNullOrWhiteSpace(tweak.Configuration.PowerShellUndoCommand))
+                return await RunPowerShellTweakAsync(tweak, apply: false);
+
+            return Ok(tweak.Id, "Combined tweak reverted");
         }
 
         // ── PowerShell ────────────────────────────────────────────────────────

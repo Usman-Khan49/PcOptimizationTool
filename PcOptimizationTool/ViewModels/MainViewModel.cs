@@ -17,19 +17,30 @@ namespace PcOptimizationTool.ViewModels
         {
             _tweakService = tweakService;
             SystemTweaks = new ObservableCollection<TweakViewModel>();
+            SecretSauceTweaks = new ObservableCollection<TweakViewModel>();
             ServiceTweaks = new ObservableCollection<TweakViewModel>();
 
             ApplySelectedTweaksCommand = new RelayCommand(async () => await ApplySelectedTweaksAsync());
             UndoSelectedTweaksCommand = new RelayCommand(async () => await UndoSelectedTweaksAsync());
             UndoLastChangesCommand = new RelayCommand(async () => await UndoLastChangesAsync());
 
+            SelectAllSystemCommand       = new RelayCommand(() => SetAllChecked(SystemTweaks, true));
+            DeselectAllSystemCommand     = new RelayCommand(() => SetAllChecked(SystemTweaks, false));
+            SelectAllSecretSauceCommand  = new RelayCommand(() => SetAllChecked(SecretSauceTweaks, true));
+            DeselectAllSecretSauceCommand = new RelayCommand(() => SetAllChecked(SecretSauceTweaks, false));
+            SelectAllServiceCommand      = new RelayCommand(() => SetAllChecked(ServiceTweaks, true));
+            DeselectAllServiceCommand    = new RelayCommand(() => SetAllChecked(ServiceTweaks, false));
+
             _ = LoadTweaksAsync();
         }
 
-        /// <summary>Left column — Registry and PowerShell tweaks</summary>
+        /// <summary>Left column — Big Boy Tweaks</summary>
         public ObservableCollection<TweakViewModel> SystemTweaks { get; }
 
-        /// <summary>Right column — Service and Windows tweaks</summary>
+        /// <summary>Right column top — Secret Sauce tweaks</summary>
+        public ObservableCollection<TweakViewModel> SecretSauceTweaks { get; }
+
+        /// <summary>Right column bottom — Windows Tweaks</summary>
         public ObservableCollection<TweakViewModel> ServiceTweaks { get; }
 
         public bool IsLoading
@@ -48,6 +59,13 @@ namespace PcOptimizationTool.ViewModels
         public ICommand UndoSelectedTweaksCommand { get; }
         public ICommand UndoLastChangesCommand { get; }
 
+        public ICommand SelectAllSystemCommand { get; }
+        public ICommand DeselectAllSystemCommand { get; }
+        public ICommand SelectAllSecretSauceCommand { get; }
+        public ICommand DeselectAllSecretSauceCommand { get; }
+        public ICommand SelectAllServiceCommand { get; }
+        public ICommand DeselectAllServiceCommand { get; }
+
         private async Task LoadTweaksAsync()
         {
             IsLoading = true;
@@ -58,6 +76,7 @@ namespace PcOptimizationTool.ViewModels
                 var tweaks = await _tweakService.LoadTweaksAsync();
 
                 SystemTweaks.Clear();
+                SecretSauceTweaks.Clear();
                 ServiceTweaks.Clear();
 
                 foreach (var tweak in tweaks)
@@ -65,12 +84,14 @@ namespace PcOptimizationTool.ViewModels
                     var vm = new TweakViewModel(tweak);
 
                     if (tweak.Panel == 2)
-                        SystemTweaks.Add(vm);  // Left  — Gaming Tweaks
+                        SystemTweaks.Add(vm);       // Left         — Big Boy Tweaks
+                    else if (tweak.Panel == 3)
+                        SecretSauceTweaks.Add(vm);  // Right top    — Secret Sauce
                     else
-                        ServiceTweaks.Add(vm); // Right — Windows Tweaks
+                        ServiceTweaks.Add(vm);      // Right bottom — Windows Tweaks
                 }
 
-                StatusMessage = $"Loaded {SystemTweaks.Count + ServiceTweaks.Count} tweaks — Ready";
+                StatusMessage = $"Loaded {SystemTweaks.Count + SecretSauceTweaks.Count + ServiceTweaks.Count} tweaks — Ready";
             }
             catch (Exception ex)
             {
@@ -84,7 +105,7 @@ namespace PcOptimizationTool.ViewModels
 
         private async Task ApplySelectedTweaksAsync()
         {
-            var selected = SystemTweaks.Concat(ServiceTweaks).Where(t => t.IsChecked).ToList();
+            var selected = SystemTweaks.Concat(SecretSauceTweaks).Concat(ServiceTweaks).Where(t => t.IsChecked).ToList();
 
             if (selected.Count == 0)
             {
@@ -111,7 +132,7 @@ namespace PcOptimizationTool.ViewModels
                     StatusMessage = $"Applied {successCount}/{selected.Count} — {firstError?.Message ?? "unknown error"}";
 
                 await _tweakService.SavePreferencesAsync(
-                    SystemTweaks.Concat(ServiceTweaks).Select(v => v.Tweak));
+                    SystemTweaks.Concat(SecretSauceTweaks).Concat(ServiceTweaks).Select(v => v.Tweak));
             }
             catch (Exception ex)
             {
@@ -125,7 +146,7 @@ namespace PcOptimizationTool.ViewModels
 
         private async Task UndoSelectedTweaksAsync()
         {
-            var selected = SystemTweaks.Concat(ServiceTweaks).Where(t => t.IsChecked).ToList();
+            var selected = SystemTweaks.Concat(SecretSauceTweaks).Concat(ServiceTweaks).Where(t => t.IsChecked).ToList();
 
             if (selected.Count == 0)
             {
@@ -148,7 +169,7 @@ namespace PcOptimizationTool.ViewModels
                 StatusMessage = $"✓ Undone {successCount}/{selected.Count} tweak(s)";
 
                 await _tweakService.SavePreferencesAsync(
-                    SystemTweaks.Concat(ServiceTweaks).Select(v => v.Tweak));
+                    SystemTweaks.Concat(SecretSauceTweaks).Concat(ServiceTweaks).Select(v => v.Tweak));
             }
             catch (Exception ex)
             {
@@ -184,7 +205,7 @@ namespace PcOptimizationTool.ViewModels
                 _lastAppliedTweaks.Clear();
 
                 await _tweakService.SavePreferencesAsync(
-                    SystemTweaks.Concat(ServiceTweaks).Select(v => v.Tweak));
+                    SystemTweaks.Concat(SecretSauceTweaks).Concat(ServiceTweaks).Select(v => v.Tweak));
             }
             catch (Exception ex)
             {
@@ -195,5 +216,10 @@ namespace PcOptimizationTool.ViewModels
                 IsLoading = false;
             }
         }
+            private static void SetAllChecked(IEnumerable<TweakViewModel> tweaks, bool value)
+            {
+                foreach (var vm in tweaks)
+                    vm.IsChecked = value;
+            }
+        }
     }
-}

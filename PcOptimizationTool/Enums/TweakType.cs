@@ -10,6 +10,8 @@ namespace PcOptimizationTool.Enums
         Service,
         ScheduledTask,
         FileSystem,
-        PowerShell
+        PowerShell,
+        Combined,
+        Choice
     }
 }
