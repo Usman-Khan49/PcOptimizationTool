@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Media;
 using PcOptimizationTool.Interfaces;
 
 namespace PcOptimizationTool.Views
@@ -16,10 +17,15 @@ namespace PcOptimizationTool.Views
 
             if (!_restorePointService.IsRunningAsAdmin())
             {
-                StatusText.Text = "⚠ Administrator privileges are required to create restore points. Please restart the app as administrator.";
-                StatusText.Foreground = System.Windows.Media.Brushes.OrangeRed;
+                StatusText.Text = "⚠ Run the app as administrator to create restore points.";
+                StatusText.Foreground = Brushes.OrangeRed;
                 CreateButton.IsEnabled = false;
             }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
         }
 
         private async void CreateButton_Click(object sender, RoutedEventArgs e)
@@ -29,13 +35,13 @@ namespace PcOptimizationTool.Views
             if (string.IsNullOrWhiteSpace(description))
             {
                 StatusText.Text = "Please enter a description.";
-                StatusText.Foreground = System.Windows.Media.Brushes.OrangeRed;
+                StatusText.Foreground = Brushes.OrangeRed;
                 return;
             }
 
             CreateButton.IsEnabled = false;
             CancelButton.IsEnabled = false;
-            StatusText.Foreground = System.Windows.Media.Brushes.Gray;
+            StatusText.Foreground = Brushes.Gray;
             StatusText.Text = "Creating restore point, please wait...";
 
             var success = await _restorePointService.CreateRestorePointAsync(description);
@@ -43,15 +49,15 @@ namespace PcOptimizationTool.Views
             if (success)
             {
                 RestorePointCreated = true;
-                StatusText.Foreground = System.Windows.Media.Brushes.Green;
+                StatusText.Foreground = Brushes.Green;
                 StatusText.Text = "✓ Restore point created successfully!";
                 await Task.Delay(1500);
                 DialogResult = true;
             }
             else
             {
-                StatusText.Foreground = System.Windows.Media.Brushes.Red;
-                StatusText.Text = "✗ Failed to create restore point. Make sure the app is running as administrator.";
+                StatusText.Foreground = Brushes.Red;
+                StatusText.Text = "✗ Failed. Make sure the app is running as administrator.";
                 CreateButton.IsEnabled = true;
                 CancelButton.IsEnabled = true;
             }
@@ -60,6 +66,11 @@ namespace PcOptimizationTool.Views
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void DescriptionTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
         }
     }
 }

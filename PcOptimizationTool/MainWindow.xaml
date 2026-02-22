@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:local="clr-namespace:PcOptimizationTool"
+        xmlns:helpers="clr-namespace:PcOptimizationTool.Helpers"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="Harris Tweaks"
@@ -15,6 +16,7 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <helpers:InverseBoolToVisibilityConverter x:Key="InvBoolToVis"/>
 
         <!-- Font families (add .ttf files to Fonts/ folder, Build Action = Resource) -->
         <FontFamily x:Key="PixelFont">pack://application:,,,/Fonts/#Press Start 2P</FontFamily>
@@ -223,17 +225,9 @@
                             VerticalAlignment="Center" Margin="0,0,4,0">
                     <Border Width="36" Height="36"
                             BorderBrush="{StaticResource CardBorder}" BorderThickness="1.5"
-                            CornerRadius="4" Margin="0,0,8,0"
-                            Background="Transparent" ToolTip="Settings">
-                        <Image Source="pack://application:,,,/Assets/gear.png"
-                               Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    </Border>
-                    <Border Width="36" Height="36"
-                            BorderBrush="{StaticResource CardBorder}" BorderThickness="1.5"
                             CornerRadius="4"
                             Background="Transparent" ToolTip="Profile">
-                        <Image Source="pack://application:,,,/Assets/profile.png"
-                               Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <Image Source="pack://application:,,,/Assets/profile.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="-2,-2,-2,-2"/>
                     </Border>
                 </StackPanel>
 
@@ -276,7 +270,7 @@
                                FontSize="8" Foreground="{StaticResource MutedText}"
                                FontWeight="Bold"/>
                     <StackPanel Orientation="Horizontal" Margin="0,6,0,8">
-                        <TextBlock Text="LVL 2 "
+                        <TextBlock Text="{Binding OptimizationLevelText, Mode=OneWay}"
                                    FontFamily="{StaticResource VT323Font}"
                                    FontSize="26" FontWeight="Bold"
                                    Foreground="{StaticResource DarkText}"/>
@@ -290,8 +284,8 @@
                     </StackPanel>
                     <Grid Height="8">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="65*"/>
-                            <ColumnDefinition Width="35*"/>
+                            <ColumnDefinition Width="{Binding OptimizationProgressApplied, Mode=OneWay}"/>
+                            <ColumnDefinition Width="{Binding OptimizationProgressRemaining, Mode=OneWay}"/>
                         </Grid.ColumnDefinitions>
                         <Rectangle Grid.Column="0" Fill="{StaticResource AccentPurple}"/>
                         <Rectangle Grid.Column="1" Fill="#E8E3D8"/>
@@ -344,12 +338,28 @@
         <Grid Grid.Row="3" Margin="20,4,20,10">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Button Content="STANDARD" Style="{StaticResource ActiveTab}"/>
-                <Button Content="PREMIUM  🔒" Style="{StaticResource InactiveTab}" Margin="2,0,0,0"/>
+                <Button Margin="2,0,0,0"
+                        Command="{Binding ShowActivationDialogCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource InactiveTab}">
+                            <Setter Property="Content" Value="PREMIUM  🔒"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsProUnlocked}" Value="True">
+                                    <Setter Property="Content" Value="✓  PREMIUM"/>
+                                    <Setter Property="Background" Value="{StaticResource AccentPurple}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Command" Value="{x:Null}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
             <Border HorizontalAlignment="Right" VerticalAlignment="Center"
                     BorderBrush="{StaticResource CardBorder}" BorderThickness="1"
                     Padding="8,4">
-                <TextBlock Text="LAST UPDATE: T-MINUS 2 HOURS"
+                <TextBlock Text="{Binding LastUpdatedText, Mode=OneWay}"
                            FontFamily="{StaticResource SilkscreenFont}"
                            FontSize="7" Foreground="{StaticResource MutedText}"/>
             </Border>
@@ -377,10 +387,28 @@
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.12" Color="#00AACC"/>
                     </Border.Effect>
-                    <TextBlock FontFamily="{StaticResource PixelFont}"
-                               FontSize="9" FontWeight="Bold"
-                               Foreground="{StaticResource DarkText}"
-                               Text="✓  ESSENTIAL"/>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="RESET" Cursor="Hand"
+                                Command="{Binding DeselectAllServiceCommand}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock x:Name="Txt" Text="{TemplateBinding Content}"
+                                               FontFamily="{StaticResource SilkscreenFont}"
+                                               FontSize="7" Foreground="{StaticResource DarkText}"
+                                               Opacity="0.5" VerticalAlignment="Center"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Txt" Property="Opacity" Value="1"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <TextBlock FontFamily="{StaticResource PixelFont}"
+                                   FontSize="9" FontWeight="Bold"
+                                   Foreground="{StaticResource DarkText}"
+                                   Text="✓  ESSENTIAL" VerticalAlignment="Center"/>
+                    </DockPanel>
                 </Border>
                 <!-- Body -->
                 <Border Grid.Row="1" BorderBrush="{StaticResource CyanBrush}" BorderThickness="2"
@@ -414,17 +442,13 @@
                                                            FontSize="10"
                                                            Foreground="{StaticResource DarkText}"
                                                            VerticalAlignment="Center"/>
-                                                <Border Width="16" Height="16" CornerRadius="8"
-                                                        Background="#E0DCD4" Margin="6,0,0,0"
-                                                        VerticalAlignment="Center" Cursor="Help"
-                                                        ToolTip="{Binding Description}"
-                                                        ToolTipService.InitialShowDelay="200"
-                                                        ToolTipService.ShowDuration="15000">
-                                                    <TextBlock Text="?" FontSize="9" FontWeight="Bold"
-                                                               Foreground="{StaticResource MutedText}"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"/>
-                                                </Border>
+                                                <Image Source="pack://application:,,,/Assets/coin.png"
+                                                       Width="16" Height="16" Margin="6,0,0,0"
+                                                       VerticalAlignment="Center" Cursor="Help"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       ToolTip="{Binding Description}"
+                                                       ToolTipService.InitialShowDelay="200"
+                                                       ToolTipService.ShowDuration="15000"/>
                                             </StackPanel>
                                             <CheckBox Grid.Column="1"
                                                       IsChecked="{Binding IsChecked, Mode=TwoWay}"
@@ -451,10 +475,28 @@
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.18" Color="#7B1FA2"/>
                     </Border.Effect>
-                    <TextBlock FontFamily="{StaticResource PixelFont}"
-                               FontSize="9" FontWeight="Bold"
-                               Foreground="White"
-                               Text="☰  BIG BOY TWEAKS" HorizontalAlignment="Left"/>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="RESET" Cursor="Hand"
+                                Command="{Binding DeselectAllSystemCommand}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock x:Name="Txt" Text="{TemplateBinding Content}"
+                                               FontFamily="{StaticResource SilkscreenFont}"
+                                               FontSize="7" Foreground="White"
+                                               Opacity="0.5" VerticalAlignment="Center"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Txt" Property="Opacity" Value="1"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <TextBlock FontFamily="{StaticResource PixelFont}"
+                                   FontSize="9" FontWeight="Bold"
+                                   Foreground="White"
+                                   Text="☰  BIG BOY TWEAKS" VerticalAlignment="Center"/>
+                    </DockPanel>
                 </Border>
                 <!-- Body -->
                 <Border Grid.Row="1" BorderBrush="{StaticResource PurpleBrush}" BorderThickness="2"
@@ -488,17 +530,13 @@
                                                            FontSize="10"
                                                            Foreground="{StaticResource DarkText}"
                                                            VerticalAlignment="Center"/>
-                                                <Border Width="16" Height="16" CornerRadius="8"
-                                                        Background="#E0DCD4" Margin="6,0,0,0"
-                                                        VerticalAlignment="Center" Cursor="Help"
-                                                        ToolTip="{Binding Description}"
-                                                        ToolTipService.InitialShowDelay="200"
-                                                        ToolTipService.ShowDuration="15000">
-                                                    <TextBlock Text="?" FontSize="9" FontWeight="Bold"
-                                                               Foreground="{StaticResource MutedText}"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"/>
-                                                </Border>
+                                                <Image Source="pack://application:,,,/Assets/coin.png"
+                                                       Width="16" Height="16" Margin="6,0,0,0"
+                                                       VerticalAlignment="Center" Cursor="Help"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       ToolTip="{Binding Description}"
+                                                       ToolTipService.InitialShowDelay="200"
+                                                       ToolTipService.ShowDuration="15000"/>
                                             </StackPanel>
                                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                                 <ComboBox ItemsSource="{Binding Options}"
@@ -531,10 +569,39 @@
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.15" Color="#CC1177"/>
                     </Border.Effect>
-                    <TextBlock FontFamily="{StaticResource PixelFont}"
-                               FontSize="9" FontWeight="Bold"
-                               Foreground="{StaticResource DarkText}"
-                               Text="⚡ SECRET SAUCE" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="RESET" Cursor="Hand"
+                                Command="{Binding DeselectAllSecretSauceCommand}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock x:Name="Txt" Text="{TemplateBinding Content}"
+                                               FontFamily="{StaticResource SilkscreenFont}"
+                                               FontSize="7" Foreground="{StaticResource DarkText}"
+                                               Opacity="0.5" VerticalAlignment="Center"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Txt" Property="Opacity" Value="1"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <TextBlock FontFamily="{StaticResource PixelFont}"
+                                   FontSize="9" FontWeight="Bold"
+                                   Foreground="{StaticResource DarkText}"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="⚡ SECRET SAUCE"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsProUnlocked}" Value="True">
+                                            <Setter Property="Text" Value="⚡ SECRET SAUCE  ✓"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DockPanel>
                 </Border>
                 <!-- Body (with dashed border + overlay) -->
                 <Grid Grid.Row="1" Margin="0,6,0,0">
@@ -542,7 +609,20 @@
                                StrokeDashArray="5 3" StrokeThickness="2"
                                Fill="White"/>
                     <ScrollViewer Margin="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                        <ItemsControl ItemsSource="{Binding SecretSauceTweaks}" Opacity="0.6">
+                        <ItemsControl ItemsSource="{Binding SecretSauceTweaks}"
+                                      Opacity="{Binding IsProLocked, Converter={StaticResource InvBoolToVis}, ConverterParameter=opacity}">
+                            <ItemsControl.Style>
+                                <Style TargetType="ItemsControl">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsProLocked}" Value="True">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsProLocked}" Value="False">
+                                            <Setter Property="Opacity" Value="1.0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ItemsControl.Style>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Padding="10,8" BorderThickness="0,0,0,1"
@@ -568,17 +648,13 @@
                                                                FontSize="10"
                                                                Foreground="{StaticResource PinkBrush}"
                                                                VerticalAlignment="Center"/>
-                                                    <Border Width="16" Height="16" CornerRadius="8"
-                                                            Background="#F0D0D8" Margin="6,0,0,0"
-                                                            VerticalAlignment="Center" Cursor="Help"
-                                                            ToolTip="{Binding Description}"
-                                                            ToolTipService.InitialShowDelay="200"
-                                                            ToolTipService.ShowDuration="15000">
-                                                        <TextBlock Text="?" FontSize="9" FontWeight="Bold"
-                                                                   Foreground="#CC8888"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center"/>
-                                                    </Border>
+                                                    <Image Source="pack://application:,,,/Assets/coin.png"
+                                                           Width="16" Height="16" Margin="6,0,0,0"
+                                                           VerticalAlignment="Center" Cursor="Help"
+                                                           RenderOptions.BitmapScalingMode="HighQuality"
+                                                           ToolTip="{Binding Description}"
+                                                           ToolTipService.InitialShowDelay="200"
+                                                           ToolTipService.ShowDuration="15000"/>
                                                 </StackPanel>
                                                 <ComboBox ItemsSource="{Binding Options}"
                                                           SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
@@ -599,7 +675,8 @@
                     </ScrollViewer>
 
                     <!-- ── PRO LOCKED overlay ── -->
-                    <Border Margin="2" Background="#E8FFFFFF" IsHitTestVisible="True">
+                    <Border Margin="2" Background="#E8FFFFFF" IsHitTestVisible="True"
+                            Visibility="{Binding IsProLocked, Converter={StaticResource BoolToVis}}">
                         <Border BorderBrush="#333333" BorderThickness="1.5"
                             Background="White" Padding="24,28"
                             VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -628,7 +705,8 @@
                                        TextAlignment="Center" TextWrapping="Wrap"
                                        HorizontalAlignment="Center"
                                        Margin="0,0,0,16"/>
-                                <Button Cursor="Hand" Width="155">
+                                <Button Cursor="Hand" Width="155"
+                                        Command="{Binding ShowActivationDialogCommand}">
                                     <Button.Template>
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border x:Name="KeyBd"

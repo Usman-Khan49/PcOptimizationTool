@@ -40,8 +40,11 @@ namespace PcOptimizationTool
             var restorePointService = new RestorePointService();
             serviceLocator.RegisterService<IRestorePointService>(restorePointService);
 
+            var licenseService = new LicenseService();
+            serviceLocator.RegisterService<ILicenseService>(licenseService);
+
             // Register ViewModels
-            var mainViewModel = new MainViewModel(tweakService);
+            var mainViewModel = new MainViewModel(tweakService, restorePointService, licenseService);
             serviceLocator.RegisterService(mainViewModel);
         }
     }
