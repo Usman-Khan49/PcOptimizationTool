@@ -1,4 +1,4 @@
-﻿<Window x:Class="PcOptimizationTool.MainWindow"
+<Window x:Class="PcOptimizationTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,329 +8,684 @@
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="Harris Tweaks"
-        Height="680" Width="940"
-        MinHeight="560" MinWidth="780"
+        Height="740" Width="1020"
+        MinHeight="640" MinWidth="900"
+        Background="#EAE5DA"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
-        <!-- Dark-theme palette -->
-        <SolidColorBrush x:Key="CardBorderBrush"    Color="#44FFFFFF"/>
-        <SolidColorBrush x:Key="CardHeaderBrush"    Color="#22FFFFFF"/>
-        <SolidColorBrush x:Key="SeparatorBrush"     Color="#33FFFFFF"/>
-        <SolidColorBrush x:Key="StatusBarBrush"     Color="#1AFFFFFF"/>
-        <SolidColorBrush x:Key="AccentBrush"        Color="#FF0078D4"/>
+        <!-- Font families (add .ttf files to Fonts/ folder, Build Action = Resource) -->
+        <FontFamily x:Key="PixelFont">pack://application:,,,/Fonts/#Press Start 2P</FontFamily>
+        <FontFamily x:Key="SilkscreenFont">pack://application:,,,/Fonts/#Silkscreen</FontFamily>
+        <FontFamily x:Key="VT323Font">pack://application:,,,/Fonts/#VT323</FontFamily>
 
-        <!-- Tiny All/None buttons used in each panel header -->
-        <Style x:Key="HeaderMiniButton" TargetType="Button">
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="Padding" Value="7,2"/>
-            <Setter Property="BorderBrush" Value="{StaticResource CardBorderBrush}"/>
-            <Setter Property="Background" Value="Transparent"/>
+        <!-- ── Colour palette ── -->
+        <SolidColorBrush x:Key="WindowBg"     Color="#EAE5DA"/>
+        <SolidColorBrush x:Key="HeaderBg"     Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="CardBg"       Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="DarkText"     Color="#1A1A1A"/>
+        <SolidColorBrush x:Key="MutedText"    Color="#777777"/>
+        <SolidColorBrush x:Key="LogoPurple"   Color="#6B21A8"/>
+        <SolidColorBrush x:Key="AccentPurple" Color="#6B21A8"/>
+        <SolidColorBrush x:Key="CyanBrush"    Color="#00DDFF"/>
+        <SolidColorBrush x:Key="PurpleBrush"  Color="#B026FF"/>
+        <SolidColorBrush x:Key="PinkBrush"    Color="#FF1493"/>
+        <SolidColorBrush x:Key="GreenBrush"   Color="#22C55E"/>
+        <SolidColorBrush x:Key="CardBorder"   Color="#C5BFB5"/>
+        <SolidColorBrush x:Key="ItemSep"      Color="#F0EBE0"/>
+
+        <!-- ── Retro CheckBox ── -->
+        <Style x:Key="RetroCheckBox" TargetType="CheckBox">
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="Outer"
+                                Width="20" Height="20"
+                                BorderThickness="2"
+                                BorderBrush="#888888"
+                                Background="White"
+                                SnapsToDevicePixels="True">
+                            <Path x:Name="Tick"
+                                  Data="M3,9 L7,13 L15,4"
+                                  Stroke="White"
+                                  StrokeThickness="2.5"
+                                  Visibility="Collapsed"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Outer" Property="Background"   Value="#3B6FEE"/>
+                                <Setter TargetName="Outer" Property="BorderBrush"  Value="#3B6FEE"/>
+                                <Setter TargetName="Tick"  Property="Visibility"   Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Outer" Property="BorderBrush" Value="#3B6FEE"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <!-- Removes default ListViewItem chrome so checkboxes render cleanly -->
+        <!-- ── Tab buttons ── -->
+        <Style x:Key="ActiveTab" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentPurple}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="{StaticResource SilkscreenFont}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="16,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InactiveTab" TargetType="Button">
+            <Setter Property="Background" Value="#D5CFC5"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="FontFamily" Value="{StaticResource SilkscreenFont}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="16,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ── Action buttons ── -->
+        <Style x:Key="ApplyBtn" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentPurple}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="{StaticResource SilkscreenFont}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="26,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#4B0082" BorderThickness="0,0,3,3"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#7C3AED"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="UndoBtn" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1A1A1A"/>
+            <Setter Property="FontFamily" Value="{StaticResource SilkscreenFont}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="26,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#1A1A1A" BorderThickness="2,2,4,4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#F5F0E8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ── ListViewItem: no chrome, subtle separator ── -->
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="Padding" Value="10,8"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <Border Background="{TemplateBinding Background}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter/>
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="{StaticResource ItemSep}">
+                            <ContentPresenter HorizontalAlignment="Stretch"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#F8F5EE"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <!-- ════════════════════════════════════════════════════════ -->
+    <Grid Background="{StaticResource WindowBg}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="2"/>
+            <!-- Divider -->
+            <RowDefinition Height="Auto"/>
+            <!-- Stat cards -->
+            <RowDefinition Height="Auto"/>
+            <!-- Tabs row -->
             <RowDefinition Height="*"/>
+            <!-- Three panels -->
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <!-- Bottom -->
         </Grid.RowDefinitions>
 
-        <!-- ── Title ──────────────────────────────────────────── -->
-        <StackPanel Grid.Row="0" Margin="0,28,0,20">
-            <TextBlock Text="Harris Tweaks"
-                       HorizontalAlignment="Center"
-                       FontSize="26" FontWeight="Bold"/>
-            <Rectangle Height="1"
-                       Margin="30,10,30,0"
-                       Fill="{StaticResource SeparatorBrush}"/>
-        </StackPanel>
+        <!-- ═══ HEADER BAR ═══════════════════════════════════ -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderBg}" Padding="16,10">
+            <DockPanel>
+                <!-- right icons -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"
+                            VerticalAlignment="Center" Margin="0,0,4,0">
+                    <Border Width="36" Height="36"
+                            BorderBrush="{StaticResource CardBorder}" BorderThickness="1.5"
+                            CornerRadius="4" Margin="0,0,8,0"
+                            Background="Transparent" ToolTip="Settings">
+                        <Image Source="pack://application:,,,/Assets/gear.png"
+                               Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Border>
+                    <Border Width="36" Height="36"
+                            BorderBrush="{StaticResource CardBorder}" BorderThickness="1.5"
+                            CornerRadius="4"
+                            Background="Transparent" ToolTip="Profile">
+                        <Image Source="pack://application:,,,/Assets/profile.png"
+                               Width="18" Height="18" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Border>
+                </StackPanel>
 
-        <!-- ── Two columns ────────────────────────────────────── -->
-        <Grid Grid.Row="1" Margin="20,0,20,0">
+                <!-- logo + title -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="pack://application:,,,/Assets/logo.png"
+                           Width="38" Height="38" Margin="0,0,12,0"
+                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <TextBlock Text="HARRIS " Foreground="#6B21A8"
+                               FontFamily="{StaticResource PixelFont}"
+                               FontSize="14" VerticalAlignment="Center"/>
+                    <TextBlock Text="TWEAKS" Foreground="#1A1A1A"
+                               FontFamily="{StaticResource PixelFont}"
+                               FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- dark line -->
+        <Rectangle Grid.Row="1" Fill="#1A1A1A"/>
+
+        <!-- ═══ STAT CARDS ═══════════════════════════════════ -->
+        <Grid Grid.Row="2" Margin="20,16,20,8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="12"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Left: Registry & Script tweaks -->
-            <Border Grid.Column="0"
-                    BorderThickness="1"
-                    BorderBrush="{StaticResource CardBorderBrush}"
-                    CornerRadius="8">
-                <DockPanel>
-                    <Border DockPanel.Dock="Top"
-                            Background="{StaticResource CardHeaderBrush}"
-                            CornerRadius="7,7,0,0"
-                            Padding="12,8">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                <Button Content="All"
-                                        Style="{StaticResource HeaderMiniButton}"
-                                        Command="{Binding SelectAllSystemCommand}"
-                                        Margin="0,0,4,0"/>
-                                <Button Content="None"
-                                        Style="{StaticResource HeaderMiniButton}"
-                                        Command="{Binding DeselectAllSystemCommand}"/>
-                            </StackPanel>
-                            <TextBlock Text="Big Boy Tweaks"
-                                       FontWeight="SemiBold"
-                                       FontSize="13"
-                                       VerticalAlignment="Center"/>
-                        </DockPanel>
-                    </Border>
-
-                    <ListView ItemsSource="{Binding SystemTweaks}"
-                              BorderThickness="0"
-                              Background="Transparent"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                                          VerticalAlignment="Center"
-                                          Margin="0,2">
-                                    <StackPanel Orientation="Horizontal" Margin="4,0,0,0" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontWeight="SemiBold"
-                                                   VerticalAlignment="Center"/>
-                                        <Border Width="15" Height="15"
-                                                CornerRadius="8"
-                                                Background="#33FFFFFF"
-                                                Margin="6,0,0,0"
-                                                VerticalAlignment="Center"
-                                                Cursor="Help"
-                                                ToolTip="{Binding Description}"
-                                                ToolTipService.InitialShowDelay="300"
-                                                ToolTipService.ShowDuration="10000">
-                                            <TextBlock Text="?"
-                                                       FontSize="9"
-                                                       FontWeight="Bold"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Opacity="0.75"/>
-                                        </Border>
-                                    </StackPanel>
-                                </CheckBox>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </DockPanel>
+            <!-- Optimization Level -->
+            <Border Grid.Column="0" Background="White"
+                    BorderBrush="{StaticResource CardBorder}" BorderThickness="1.5,1.5,3,3"
+                    Padding="14,10">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.15" Color="Black"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="OPTIMIZATION LEVEL"
+                               FontFamily="{StaticResource SilkscreenFont}"
+                               FontSize="8" Foreground="{StaticResource MutedText}"
+                               FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,8">
+                        <TextBlock Text="LVL 2 "
+                                   FontFamily="{StaticResource VT323Font}"
+                                   FontSize="26" FontWeight="Bold"
+                                   Foreground="{StaticResource DarkText}"/>
+                        <Border Background="{StaticResource GreenBrush}"
+                                CornerRadius="2" Padding="5,2"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="ACTIVE"
+                                       FontFamily="{StaticResource SilkscreenFont}"
+                                       FontSize="7" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                    <Grid Height="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="65*"/>
+                            <ColumnDefinition Width="35*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Grid.Column="0" Fill="{StaticResource AccentPurple}"/>
+                        <Rectangle Grid.Column="1" Fill="#E8E3D8"/>
+                    </Grid>
+                </StackPanel>
             </Border>
 
-            <!-- Right: Secret Sauce (top) + Windows Tweaks (bottom) -->
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!-- Top: Secret Sauce -->
-                <Border Grid.Row="0"
-                        BorderThickness="1"
-                        BorderBrush="{StaticResource CardBorderBrush}"
-                        CornerRadius="8">
-                    <DockPanel>
-                        <Border DockPanel.Dock="Top"
-                                Background="{StaticResource CardHeaderBrush}"
-                                CornerRadius="7,7,0,0"
-                                Padding="12,8">
-                            <DockPanel>
-                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                    <Button Content="All"
-                                            Style="{StaticResource HeaderMiniButton}"
-                                            Command="{Binding SelectAllSecretSauceCommand}"
-                                            Margin="0,0,4,0"/>
-                                    <Button Content="None"
-                                            Style="{StaticResource HeaderMiniButton}"
-                                            Command="{Binding DeselectAllSecretSauceCommand}"/>
-                                </StackPanel>
-                                <TextBlock Text="Secret Sauce"
-                                           FontWeight="SemiBold"
-                                           FontSize="13"
-                                           VerticalAlignment="Center"/>
-                            </DockPanel>
+            <!-- Tweaks Applied (dynamic) -->
+            <Border Grid.Column="2" Background="White"
+                    BorderBrush="{StaticResource CardBorder}" BorderThickness="1.5,1.5,3,3"
+                    Padding="14,10">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.15" Color="Black"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="TWEAKS APPLIED"
+                               FontFamily="{StaticResource SilkscreenFont}"
+                               FontSize="8" Foreground="{StaticResource MutedText}"
+                               FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,8">
+                        <TextBlock FontFamily="{StaticResource VT323Font}"
+                                   FontSize="26" FontWeight="Bold"
+                                   Foreground="{StaticResource DarkText}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}/{1}">
+                                    <Binding Path="AppliedTweaksCount"/>
+                                    <Binding Path="TotalTweaksCount"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <Border Background="{StaticResource PinkBrush}"
+                                CornerRadius="2" Padding="5,2"
+                                VerticalAlignment="Center" Margin="8,0,0,0">
+                            <TextBlock Text="RUNNING"
+                                       FontFamily="{StaticResource SilkscreenFont}"
+                                       FontSize="7" Foreground="White" FontWeight="Bold"/>
                         </Border>
-
-                        <ListView ItemsSource="{Binding SecretSauceTweaks}"
-                                  BorderThickness="0"
-                                  Background="Transparent"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                                              VerticalAlignment="Top"
-                                              Margin="0,2">
-                                        <StackPanel Margin="4,0,0,0">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="SemiBold"
-                                                           VerticalAlignment="Center"/>
-                                                <Border Width="15" Height="15"
-                                                        CornerRadius="8"
-                                                        Background="#33FFFFFF"
-                                                        Margin="6,0,0,0"
-                                                        VerticalAlignment="Center"
-                                                        Cursor="Help"
-                                                        ToolTip="{Binding Description}"
-                                                        ToolTipService.InitialShowDelay="300"
-                                                        ToolTipService.ShowDuration="10000">
-                                                    <TextBlock Text="?"
-                                                               FontSize="9"
-                                                               FontWeight="Bold"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"
-                                                               Opacity="0.75"/>
-                                                </Border>
-                                            </StackPanel>
-                                            <ComboBox ItemsSource="{Binding Options}"
-                                                      SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
-                                                      DisplayMemberPath="Label"
-                                                      MinWidth="200"
-                                                      Margin="0,6,0,2"
-                                                      Visibility="{Binding IsChoiceTweak, Converter={StaticResource BoolToVis}}"/>
-                                        </StackPanel>
-                                    </CheckBox>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </DockPanel>
-                </Border>
-
-                <!-- Bottom: Windows Tweaks -->
-                <Border Grid.Row="2"
-                        BorderThickness="1"
-                        BorderBrush="{StaticResource CardBorderBrush}"
-                        CornerRadius="8">
-                    <DockPanel>
-                        <Border DockPanel.Dock="Top"
-                                Background="{StaticResource CardHeaderBrush}"
-                                CornerRadius="7,7,0,0"
-                                Padding="12,8">
-                            <DockPanel>
-                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                    <Button Content="All"
-                                            Style="{StaticResource HeaderMiniButton}"
-                                            Command="{Binding SelectAllServiceCommand}"
-                                            Margin="0,0,4,0"/>
-                                    <Button Content="None"
-                                            Style="{StaticResource HeaderMiniButton}"
-                                            Command="{Binding DeselectAllServiceCommand}"/>
-                                </StackPanel>
-                                <TextBlock Text="Windows Tweaks"
-                                           FontWeight="SemiBold"
-                                           FontSize="13"
-                                           VerticalAlignment="Center"/>
-                            </DockPanel>
-                        </Border>
-
-                        <ListView ItemsSource="{Binding ServiceTweaks}"
-                                  BorderThickness="0"
-                                  Background="Transparent"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
-                                                          VerticalAlignment="Center"
-                                                          Margin="0,2">
-                                                    <StackPanel Orientation="Horizontal" Margin="4,0,0,0" VerticalAlignment="Center">
-                                                        <TextBlock Text="{Binding Name}"
-                                                                   FontWeight="SemiBold"
-                                                                   VerticalAlignment="Center"/>
-                                                        <Border Width="15" Height="15"
-                                                                CornerRadius="8"
-                                                                Background="#33FFFFFF"
-                                                                Margin="6,0,0,0"
-                                                                VerticalAlignment="Center"
-                                                                Cursor="Help"
-                                                                ToolTip="{Binding Description}"
-                                                                ToolTipService.InitialShowDelay="300"
-                                                                ToolTipService.ShowDuration="10000">
-                                                            <TextBlock Text="?"
-                                                                       FontSize="9"
-                                                                       FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"
-                                                                       Opacity="0.75"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                </CheckBox>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </DockPanel>
-                            </Border>
-                            </Grid>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="14" Height="14" Fill="#E05555" Margin="0,0,3,0"/>
+                        <Rectangle Width="14" Height="14" Fill="#FF1493" Margin="0,0,3,0"/>
+                        <Rectangle Width="14" Height="14" Fill="#B026FF" Margin="0,0,3,0"/>
+                        <Rectangle Width="14" Height="14" Fill="#E0D8CC"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </Grid>
 
-        <!-- ── Buttons ────────────────────────────────────────── -->
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    Margin="0,18,0,18">
-            <Button Content="Apply Tweaks"
-                    Command="{Binding ApplySelectedTweaksCommand}"
-                    Background="{StaticResource AccentBrush}"
-                    Foreground="White"
-                    BorderBrush="Transparent"
-                    MinWidth="145" Padding="16,8"
-                    Margin="0,0,10,0"/>
-            <Button Content="Undo Tweaks"
-                    Command="{Binding UndoSelectedTweaksCommand}"
-                    MinWidth="145" Padding="16,8"
-                    Margin="0,0,10,0"/>
-            <Button Content="Undo Last Changes"
-                    Command="{Binding UndoLastChangesCommand}"
-                    MinWidth="160" Padding="16,8"/>
-        </StackPanel>
+        <!-- ═══ TABS ROW ═════════════════════════════════════ -->
+        <Grid Grid.Row="3" Margin="20,4,20,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Content="STANDARD" Style="{StaticResource ActiveTab}"/>
+                <Button Content="PREMIUM  🔒" Style="{StaticResource InactiveTab}" Margin="2,0,0,0"/>
+            </StackPanel>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Center"
+                    BorderBrush="{StaticResource CardBorder}" BorderThickness="1"
+                    Padding="8,4">
+                <TextBlock Text="LAST UPDATE: T-MINUS 2 HOURS"
+                           FontFamily="{StaticResource SilkscreenFont}"
+                           FontSize="7" Foreground="{StaticResource MutedText}"/>
+            </Border>
+        </Grid>
 
-        <!-- ── Status bar ─────────────────────────────────────── -->
-        <Border Grid.Row="3"
-                Background="{StaticResource StatusBarBrush}"
-                BorderThickness="0,1,0,0"
-                BorderBrush="{StaticResource CardBorderBrush}"
-                Padding="16,7">
-            <DockPanel>
+        <!-- ═══ THREE PANELS ═════════════════════════════════ -->
+        <Grid Grid.Row="4" Margin="20,0,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ── ESSENTIAL (cyan) — ServiceTweaks ── -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Header -->
+                <Border Grid.Row="0" Background="{StaticResource CyanBrush}" Padding="12,8"
+                        BorderBrush="{StaticResource CyanBrush}" BorderThickness="2,2,3,3">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.12" Color="#00AACC"/>
+                    </Border.Effect>
+                    <TextBlock FontFamily="{StaticResource PixelFont}"
+                               FontSize="9" FontWeight="Bold"
+                               Foreground="{StaticResource DarkText}"
+                               Text="✓  ESSENTIAL"/>
+                </Border>
+                <!-- Body -->
+                <Border Grid.Row="1" BorderBrush="{StaticResource CyanBrush}" BorderThickness="2"
+                        Background="White" Margin="0,6,0,0">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.12" Color="#00AACC"/>
+                    </Border.Effect>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding ServiceTweaks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10,8" BorderThickness="0,0,0,1"
+                                            BorderBrush="{StaticResource ItemSep}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#F8F5EE"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontFamily="{StaticResource SilkscreenFont}"
+                                                           FontSize="10"
+                                                           Foreground="{StaticResource DarkText}"
+                                                           VerticalAlignment="Center"/>
+                                                <Border Width="16" Height="16" CornerRadius="8"
+                                                        Background="#E0DCD4" Margin="6,0,0,0"
+                                                        VerticalAlignment="Center" Cursor="Help"
+                                                        ToolTip="{Binding Description}"
+                                                        ToolTipService.InitialShowDelay="200"
+                                                        ToolTipService.ShowDuration="15000">
+                                                    <TextBlock Text="?" FontSize="9" FontWeight="Bold"
+                                                               Foreground="{StaticResource MutedText}"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <CheckBox Grid.Column="1"
+                                                      IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                      Style="{StaticResource RetroCheckBox}"
+                                                      VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+
+            <!-- ── BIG BOY TWEAKS (purple) — SystemTweaks ── -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Header -->
+                <Border Grid.Row="0" Background="{StaticResource PurpleBrush}" Padding="12,8"
+                        BorderBrush="{StaticResource PurpleBrush}" BorderThickness="2,2,3,3">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.18" Color="#7B1FA2"/>
+                    </Border.Effect>
+                    <TextBlock FontFamily="{StaticResource PixelFont}"
+                               FontSize="9" FontWeight="Bold"
+                               Foreground="White"
+                               Text="☰  BIG BOY TWEAKS" HorizontalAlignment="Left"/>
+                </Border>
+                <!-- Body -->
+                <Border Grid.Row="1" BorderBrush="{StaticResource PurpleBrush}" BorderThickness="2"
+                        Background="White" Margin="0,6,0,0">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.18" Color="#7B1FA2"/>
+                    </Border.Effect>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding SystemTweaks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10,8" BorderThickness="0,0,0,1"
+                                            BorderBrush="{StaticResource ItemSep}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#F8F5EE"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontFamily="{StaticResource SilkscreenFont}"
+                                                           FontSize="10"
+                                                           Foreground="{StaticResource DarkText}"
+                                                           VerticalAlignment="Center"/>
+                                                <Border Width="16" Height="16" CornerRadius="8"
+                                                        Background="#E0DCD4" Margin="6,0,0,0"
+                                                        VerticalAlignment="Center" Cursor="Help"
+                                                        ToolTip="{Binding Description}"
+                                                        ToolTipService.InitialShowDelay="200"
+                                                        ToolTipService.ShowDuration="15000">
+                                                    <TextBlock Text="?" FontSize="9" FontWeight="Bold"
+                                                               Foreground="{StaticResource MutedText}"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <ComboBox ItemsSource="{Binding Options}"
+                                                          SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
+                                                          DisplayMemberPath="Label"
+                                                          MinWidth="100" Margin="0,0,8,0"
+                                                          Visibility="{Binding IsChoiceTweak,
+                                                                       Converter={StaticResource BoolToVis}}"/>
+                                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                          Style="{StaticResource RetroCheckBox}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+
+            <!-- ── SECRET SAUCE (pink dashed) — SecretSauceTweaks ── -->
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Header (outside overlay so it stays crisp) -->
+                <Border Grid.Row="0" Background="{StaticResource PinkBrush}" Padding="12,8"
+                        BorderBrush="{StaticResource PinkBrush}" BorderThickness="2,2,3,3">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="3" Direction="315" BlurRadius="0" Opacity="0.15" Color="#CC1177"/>
+                    </Border.Effect>
+                    <TextBlock FontFamily="{StaticResource PixelFont}"
+                               FontSize="9" FontWeight="Bold"
+                               Foreground="{StaticResource DarkText}"
+                               Text="⚡ SECRET SAUCE" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                </Border>
+                <!-- Body (with dashed border + overlay) -->
+                <Grid Grid.Row="1" Margin="0,6,0,0">
+                    <Rectangle Stroke="{StaticResource PinkBrush}"
+                               StrokeDashArray="5 3" StrokeThickness="2"
+                               Fill="White"/>
+                    <ScrollViewer Margin="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding SecretSauceTweaks}" Opacity="0.6">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10,8" BorderThickness="0,0,0,1"
+                                            BorderBrush="{StaticResource ItemSep}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#F8F5EE"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontFamily="{StaticResource SilkscreenFont}"
+                                                               FontSize="10"
+                                                               Foreground="{StaticResource PinkBrush}"
+                                                               VerticalAlignment="Center"/>
+                                                    <Border Width="16" Height="16" CornerRadius="8"
+                                                            Background="#F0D0D8" Margin="6,0,0,0"
+                                                            VerticalAlignment="Center" Cursor="Help"
+                                                            ToolTip="{Binding Description}"
+                                                            ToolTipService.InitialShowDelay="200"
+                                                            ToolTipService.ShowDuration="15000">
+                                                        <TextBlock Text="?" FontSize="9" FontWeight="Bold"
+                                                                   Foreground="#CC8888"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </StackPanel>
+                                                <ComboBox ItemsSource="{Binding Options}"
+                                                          SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
+                                                          DisplayMemberPath="Label"
+                                                          MinWidth="140" Margin="0,4,0,0"
+                                                          Visibility="{Binding IsChoiceTweak,
+                                                                       Converter={StaticResource BoolToVis}}"/>
+                                            </StackPanel>
+                                            <CheckBox Grid.Column="1"
+                                                      IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                      Style="{StaticResource RetroCheckBox}"
+                                                      VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- ── PRO LOCKED overlay ── -->
+                    <Border Margin="2" Background="#E8FFFFFF" IsHitTestVisible="True">
+                        <Border BorderBrush="#333333" BorderThickness="1.5"
+                            Background="White" Padding="24,28"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            MaxWidth="220">
+                            <StackPanel HorizontalAlignment="Center">
+                                <!-- Lock icon -->
+                                <Border Width="44" Height="44" CornerRadius="22"
+                                    Background="#FFF0F5"
+                                    HorizontalAlignment="Center" Margin="0,0,0,12">
+                                    <TextBlock Text="🔒" FontSize="18"
+                                           Foreground="{StaticResource PinkBrush}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- Title -->
+                                <TextBlock Text="PRO LOCKED"
+                                       FontFamily="{StaticResource PixelFont}"
+                                       FontSize="10" FontWeight="Bold"
+                                       Foreground="{StaticResource DarkText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,10"/>
+                                <!-- Description -->
+                                <TextBlock Text="Unlock the secret sauce to gain maximum competitive advantage."
+                                       FontFamily="{StaticResource VT323Font}"
+                                       FontSize="15" Foreground="{StaticResource MutedText}"
+                                       TextAlignment="Center" TextWrapping="Wrap"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,16"/>
+                                <Button Cursor="Hand" Width="155">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="KeyBd"
+                                                Background="{StaticResource PinkBrush}"
+                                                Padding="20,10">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TextBlock Text="🔗  "
+                                                           Foreground="White" FontSize="11"
+                                                           VerticalAlignment="Center"/>
+                                                    <TextBlock Text="ENTER KEY"
+                                                           FontFamily="{StaticResource SilkscreenFont}"
+                                                           FontSize="9" FontWeight="Bold"
+                                                           Foreground="White"
+                                                           VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="KeyBd" Property="Background" Value="#E6137E"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <!-- Enter Key button -->
+                                <!-- Bottom accent line -->
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- ═══ BOTTOM ═══════════════════════════════════════ -->
+        <StackPanel Grid.Row="5" HorizontalAlignment="Center" Margin="0,10,0,14">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="↺  UNDO TWEAKS"
+                        Style="{StaticResource UndoBtn}"
+                        Command="{Binding UndoSelectedTweaksCommand}"
+                        Margin="0,0,14,0"/>
+                <Button Content="✦  APPLY TWEAKS"
+                        Style="{StaticResource ApplyBtn}"
+                        Command="{Binding ApplySelectedTweaksCommand}"/>
+            </StackPanel>
+            <!-- Subtle status line -->
+            <DockPanel Margin="0,6,0,0" HorizontalAlignment="Center">
                 <ProgressBar DockPanel.Dock="Right"
                              IsIndeterminate="True"
-                             Width="110" Height="4"
+                             Width="80" Height="3"
+                             Margin="8,0,0,0"
                              VerticalAlignment="Center"
                              Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"/>
-                <TextBox Text="{Binding StatusMessage, Mode=OneWay}"
-                         VerticalAlignment="Center"
-                         FontSize="12"
-                         Opacity="0.7"
-                         IsReadOnly="True"
-                         BorderThickness="0"
-                         Background="Transparent"
-                         IsTabStop="False"
-                         TextWrapping="NoWrap"/>
+                <TextBlock Text="{Binding StatusMessage, Mode=OneWay}"
+                           FontFamily="{StaticResource SilkscreenFont}"
+                           FontSize="8" Foreground="{StaticResource MutedText}"
+                           VerticalAlignment="Center"/>
             </DockPanel>
-        </Border>
+        </StackPanel>
     </Grid>
 </Window>
-

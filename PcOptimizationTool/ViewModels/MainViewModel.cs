@@ -12,6 +12,8 @@ namespace PcOptimizationTool.ViewModels
         private bool _isLoading;
         private string _statusMessage = "Ready";
         private List<TweakViewModel> _lastAppliedTweaks = new();
+        private int _totalTweaksCount;
+        private int _appliedTweaksCount;
 
         public MainViewModel(ITweakService tweakService)
         {
@@ -55,6 +57,18 @@ namespace PcOptimizationTool.ViewModels
             set => SetProperty(ref _statusMessage, value);
         }
 
+        public int TotalTweaksCount
+        {
+            get => _totalTweaksCount;
+            set => SetProperty(ref _totalTweaksCount, value);
+        }
+
+        public int AppliedTweaksCount
+        {
+            get => _appliedTweaksCount;
+            set => SetProperty(ref _appliedTweaksCount, value);
+        }
+
         public ICommand ApplySelectedTweaksCommand { get; }
         public ICommand UndoSelectedTweaksCommand { get; }
         public ICommand UndoLastChangesCommand { get; }
@@ -82,6 +96,11 @@ namespace PcOptimizationTool.ViewModels
                 foreach (var tweak in tweaks)
                 {
                     var vm = new TweakViewModel(tweak);
+                    vm.PropertyChanged += (_, e) =>
+                    {
+                        if (e.PropertyName == nameof(TweakViewModel.IsChecked))
+                            RefreshCounts();
+                    };
 
                     if (tweak.Panel == 2)
                         SystemTweaks.Add(vm);       // Left         — Big Boy Tweaks
@@ -91,7 +110,8 @@ namespace PcOptimizationTool.ViewModels
                         ServiceTweaks.Add(vm);      // Right bottom — Windows Tweaks
                 }
 
-                StatusMessage = $"Loaded {SystemTweaks.Count + SecretSauceTweaks.Count + ServiceTweaks.Count} tweaks — Ready";
+                RefreshCounts();
+                StatusMessage = $"Loaded {TotalTweaksCount} tweaks — Ready";
             }
             catch (Exception ex)
             {
@@ -216,10 +236,17 @@ namespace PcOptimizationTool.ViewModels
                 IsLoading = false;
             }
         }
-            private static void SetAllChecked(IEnumerable<TweakViewModel> tweaks, bool value)
-            {
-                foreach (var vm in tweaks)
-                    vm.IsChecked = value;
+                    private void RefreshCounts()
+                    {
+                        var all = SystemTweaks.Concat(SecretSauceTweaks).Concat(ServiceTweaks);
+                        TotalTweaksCount = all.Count();
+                        AppliedTweaksCount = all.Count(t => t.IsChecked);
+                    }
+
+                    private static void SetAllChecked(IEnumerable<TweakViewModel> tweaks, bool value)
+                    {
+                        foreach (var vm in tweaks)
+                            vm.IsChecked = value;
+                    }
+                }
             }
-        }
-    }
