@@ -16,7 +16,7 @@
 
 <br/>
 
-<img src="docs/screenshot.PNG" alt="Harris Tweaks Main Window" width = 800>
+<img src="docs/screenshot.PNG" alt="Harris Tweaks Main Window" width="800">
 
 <br/>
 
@@ -68,7 +68,7 @@ No cloud. No subscriptions. No BS. Just raw performance.
 ## 🖥️ SCREENSHOT
 
 <div align="center">
-<img src="docs/screenshot.png" alt="Harris Tweaks Main Window" width="800"/>
+<img src="docs/screenshot.PNG" alt="Harris Tweaks Main Window" width="800"/>
 </div>
 
 ---
@@ -84,75 +84,7 @@ No cloud. No subscriptions. No BS. Just raw performance.
 | **Storage** | AES-256 encrypted license file |
 | **Architecture** | MVVM with service locator DI |
 
----
 
-## 🚀 GETTING STARTED
-
-### Prerequisites
-- Windows 10/11 (x64)
-- No .NET installation needed (self-contained build)
-
-### Run the App
-1. Download the latest release from [Releases](https://github.com/Usman-Khan49/PcOptimizationTool/releases)
-2. Extract the zip
-3. Run `PcOptimizationTool.exe` **as Administrator** (required for system tweaks)
-
-### Build from Source
-```bash
-git clone https://github.com/Usman-Khan49/PcOptimizationTool.git
-cd PcOptimizationTool
-dotnet publish PcOptimizationTool/PcOptimizationTool.csproj -c Release -r win-x64
-```
-
-Output: `PcOptimizationTool/bin/Release/net10.0-windows/win-x64/publish/`
-
----
-
-## 🔐 ACTIVATION
-
-The **Secret Sauce** tweaks require a Pro license key.
-
-1. Click **PREMIUM 🔒** or the **ENTER KEY** button
-2. Paste your activation key
-3. Hit **ACTIVATE**
-
-Keys are verified offline using RSA-2048 signatures — no internet required, ever.
-
-> To get a key, visit our Discord: **harris.tweaks/discord**
-
----
-
-## 🛡️ SAFETY
-
-- **Restore Points** — Harris Tweaks prompts you to create a system restore point before your first apply. Roll back anytime.
-- **Undo Button** — Every tweak can be individually undone with one click.
-- **No Permanent Changes** — All tweaks modify reversible registry keys and service states.
-
----
-
-## 📁 PROJECT STRUCTURE
-
-```
-PcOptimizationTool/
-├── Assets/              # Icons, logos, coin images
-├── Data/                # tweaks.json (tweak definitions)
-├── Enums/               # TweakType, TweakCategory, LicenseStatus
-├── Fonts/               # Press Start 2P, Silkscreen, VT323
-├── Helpers/             # RelayCommand, ServiceLocator, converters
-├── Interfaces/          # Service contracts
-├── Models/              # Tweak, TweakOption, LicenseInfo, etc.
-├── Resources/           # Embedded public key for license verification
-├── Services/            # TweakService, RegistryService, LicenseService
-├── ViewModels/          # MainViewModel, TweakViewModel (MVVM)
-├── Views/               # Activation & Restore Point dialogs
-├── MainWindow.xaml      # Main UI
-└── App.xaml             # App startup & DI registration
-
-HarrisTweaks.KeyGenerator/
-└── Program.cs           # Owner-only license key generation tool
-```
-
----
 
 ## ⚠️ DISCLAIMER
 
