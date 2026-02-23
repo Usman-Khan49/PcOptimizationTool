@@ -16,7 +16,7 @@
 
 <br/>
 
-![Main Tweaks Window](docs/screenshot.png)
+<img src="docs/screenshot.PNG" alt="Harris Tweaks Main Window" width = 800>
 
 <br/>
 
