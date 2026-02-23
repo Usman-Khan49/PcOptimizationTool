@@ -58,8 +58,6 @@ Harris Tweaks strips your PC down to what matters — disabling telemetry, killi
 | **Framework** | .NET 10 / WPF |
 | **UI Theme** | ModernWPF + custom retro pixel art |
 | **Fonts** | Press Start 2P, Silkscreen, VT323 |
-| **Licensing** | RSA-2048 PSS offline activation |
-| **Storage** | AES-256 encrypted license file |
 | **Architecture** | MVVM with service locator DI |
 
 ---
